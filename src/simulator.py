@@ -6,7 +6,7 @@ import logging
 from datetime import datetime, timezone
 
 from src.config import (
-    INITIAL_BALANCE, TOTAL_COST_RATE,
+    INITIAL_BALANCE, TOTAL_COST_RATE, USDT_JPY_RATE,
     CIRCUIT_BREAKER_THRESHOLD, POSITION_CHANGE_THRESHOLD,
 )
 from src.database import (
@@ -55,7 +55,7 @@ class Simulator:
         Args:
             symbol: 銘柄ペア
             signal: {"target_position": 0.0~1.0, "confidence": float, "reason": str}
-            current_price: 現在価格
+            current_price: 現在価格 (USDT建て → 内部でJPY変換)
 
         Returns:
             dict: 取引結果
@@ -63,14 +63,17 @@ class Simulator:
         if not self.is_active:
             return {"executed": False, "reason": "サーキットブレーカーにより停止中"}
 
+        # USDT→JPY変換
+        price_jpy = current_price * USDT_JPY_RATE
+
         target_pos = signal.get("target_position", 0.0)
         confidence = signal.get("confidence", 0.0)
         reason = signal.get("reason", "")
 
         # 現在のポジション比率を計算
-        total_asset = self._total_asset({symbol: current_price})
+        total_asset = self._total_asset_jpy({symbol: current_price})
         current_qty = self.quantities.get(symbol, 0.0)
-        current_value = current_qty * current_price
+        current_value = current_qty * price_jpy
         current_pos = current_value / total_asset if total_asset > 0 else 0.0
 
         # ポジション変更の差分
@@ -89,26 +92,26 @@ class Simulator:
 
         if delta > 0:
             result = self._increase_position(
-                symbol, current_price, delta, total_asset,
+                symbol, price_jpy, delta, total_asset,
                 target_pos, current_pos, confidence, now, reason
             )
         else:
             result = self._decrease_position(
-                symbol, current_price, abs(delta), total_asset,
+                symbol, price_jpy, abs(delta), total_asset,
                 target_pos, current_pos, confidence, now, reason
             )
 
         # サーキットブレーカーチェック
-        if not self._check_circuit_breaker({symbol: current_price}):
+        if not self._check_circuit_breaker_jpy({symbol: current_price}):
             self.is_active = False
             update_bot_state(self.bot_name, self.balance, is_active=False)
 
         return result
 
-    def _increase_position(self, symbol, price, delta, total_asset,
+    def _increase_position(self, symbol, price_jpy, delta, total_asset,
                            target_pos, prev_pos, confidence, timestamp, reason):
-        """ポジションを増やす (買い)。"""
-        # 購入金額 = total_asset × delta
+        """ポジションを増やす (買い)。price_jpyはJPY建て。"""
+        # 購入金額(円) = total_asset × delta
         buy_amount = total_asset * delta
 
         if buy_amount > self.balance:
@@ -117,7 +120,7 @@ class Simulator:
         if buy_amount <= 0:
             return {"executed": False, "reason": "残高不足"}
 
-        effective_price = price * (1 + TOTAL_COST_RATE)
+        effective_price = price_jpy * (1 + TOTAL_COST_RATE)
         quantity = buy_amount / effective_price
 
         self.balance -= buy_amount
@@ -125,7 +128,7 @@ class Simulator:
 
         save_trade(
             timestamp=timestamp, bot_name=self.bot_name, symbol=symbol,
-            action="BUY", price=price, effective_price=effective_price,
+            action="BUY", price=price_jpy, effective_price=effective_price,
             quantity=quantity, balance=self.balance,
             position=self.quantities[symbol],
             target_position=target_pos, prev_position=prev_pos,
@@ -136,19 +139,19 @@ class Simulator:
         logger.info(
             f"[{self.bot_name}] BUY {symbol}: "
             f"pos {prev_pos:.2f}→{target_pos:.2f}, qty={quantity:.6f}, "
-            f"残高={self.balance:.0f}"
+            f"残高=¥{self.balance:,.0f}"
         )
         return {
             "executed": True, "action": "BUY", "symbol": symbol,
-            "quantity": quantity, "price": price,
+            "quantity": quantity, "price": price_jpy,
             "effective_price": effective_price,
             "balance": self.balance,
             "prev_pos": prev_pos, "target_pos": target_pos,
         }
 
-    def _decrease_position(self, symbol, price, delta, total_asset,
+    def _decrease_position(self, symbol, price_jpy, delta, total_asset,
                            target_pos, prev_pos, confidence, timestamp, reason):
-        """ポジションを減らす (売り)。"""
+        """ポジションを減らす (売り)。price_jpyはJPY建て。"""
         current_qty = self.quantities.get(symbol, 0.0)
         if current_qty <= 0:
             return {"executed": False, "reason": f"{symbol}のポジションなし"}
@@ -161,19 +164,17 @@ class Simulator:
 
         sell_quantity = current_qty * sell_ratio
 
-        effective_price = price * (1 - TOTAL_COST_RATE)
+        effective_price = price_jpy * (1 - TOTAL_COST_RATE)
         sale_amount = sell_quantity * effective_price
 
         self.balance += sale_amount
         self.quantities[symbol] = current_qty - sell_quantity
 
-        # PnL は概算 (売却額 - 元の投資額)
-        # 正確なPnLは平均取得価格が必要だが、簡易版ではコスト差分のみ
-        profit_loss = sell_quantity * (effective_price - price)
+        profit_loss = sell_quantity * (effective_price - price_jpy)
 
         save_trade(
             timestamp=timestamp, bot_name=self.bot_name, symbol=symbol,
-            action="SELL", price=price, effective_price=effective_price,
+            action="SELL", price=price_jpy, effective_price=effective_price,
             quantity=sell_quantity, balance=self.balance,
             position=self.quantities[symbol],
             target_position=target_pos, prev_position=prev_pos,
@@ -184,40 +185,40 @@ class Simulator:
         logger.info(
             f"[{self.bot_name}] SELL {symbol}: "
             f"pos {prev_pos:.2f}→{target_pos:.2f}, qty={sell_quantity:.6f}, "
-            f"残高={self.balance:.0f}"
+            f"残高=¥{self.balance:,.0f}"
         )
         return {
             "executed": True, "action": "SELL", "symbol": symbol,
-            "quantity": sell_quantity, "price": price,
+            "quantity": sell_quantity, "price": price_jpy,
             "effective_price": effective_price,
             "balance": self.balance, "profit_loss": profit_loss,
             "prev_pos": prev_pos, "target_pos": target_pos,
         }
 
-    def _total_asset(self, current_prices: dict) -> float:
-        """総資産を計算する。"""
+    def _total_asset_jpy(self, current_prices_usdt: dict) -> float:
+        """総資産(円)を計算する。current_pricesはUSDT建て。"""
         position_value = 0
         for sym, qty in self.quantities.items():
-            if sym in current_prices and qty > 0:
-                position_value += qty * current_prices[sym]
+            if sym in current_prices_usdt and qty > 0:
+                position_value += qty * current_prices_usdt[sym] * USDT_JPY_RATE
         return self.balance + position_value
 
-    def _check_circuit_breaker(self, current_prices: dict) -> bool:
+    def _check_circuit_breaker_jpy(self, current_prices_usdt: dict) -> bool:
         """サーキットブレーカー判定。"""
-        total = self._total_asset(current_prices)
+        total = self._total_asset_jpy(current_prices_usdt)
         loss_rate = (INITIAL_BALANCE - total) / INITIAL_BALANCE
         if loss_rate >= CIRCUIT_BREAKER_THRESHOLD:
             logger.warning(
                 f"[{self.bot_name}] ⚠️ サーキットブレーカー発動！ "
-                f"総資産: {total:.0f} (損失率: {loss_rate:.1%})"
+                f"総資産: ¥{total:,.0f} (損失率: {loss_rate:.1%})"
             )
             return False
         return True
 
     def save_snapshot(self, current_prices: dict, trade_count: int = 0):
-        """残高スナップショットを保存する。"""
+        """残高スナップショット(円)を保存する。current_pricesはUSDT建て。"""
         position_value = sum(
-            qty * current_prices.get(sym, 0)
+            qty * current_prices.get(sym, 0) * USDT_JPY_RATE
             for sym, qty in self.quantities.items()
             if qty > 0
         )

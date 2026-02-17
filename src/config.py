@@ -21,7 +21,8 @@ EXCHANGE_ID = "bybit"
 # ============================================================
 # 運用パラメータ
 # ============================================================
-INITIAL_BALANCE = 10_000        # 各ボットの初期仮想資産（USDT）
+INITIAL_BALANCE = 50_000         # 各ボットの初期仮想資産（円）
+USDT_JPY_RATE = 150.0            # USDT→JPY変換レート（概算）
 TRADE_FEE_RATE = 0.001          # 取引手数料 (0.1% = taker)
 SLIPPAGE_RATE = 0.0005          # スリッページ (0.05%)
 TOTAL_COST_RATE = TRADE_FEE_RATE + SLIPPAGE_RATE  # 合計 0.15%

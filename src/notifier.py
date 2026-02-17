@@ -84,7 +84,7 @@ def generate_daily_report() -> str:
 
         bot_num = bot_name.split("_")[0]
         lines.append(
-            f"{status} #{bot_num} {pnl_icon} ${balance:,.0f} "
+            f"{status} #{bot_num} {pnl_icon} ¥{balance:,.0f} "
             f"({pnl_pct:+.1f}%) T:{summary['trade_count']}"
         )
 
@@ -95,8 +95,8 @@ def generate_daily_report() -> str:
     total_pnl_pct = (total_pnl / (INITIAL_BALANCE * len(BOT_NAMES))) * 100
     lines.extend([
         "=" * 28,
-        f"💰 合計: ${total_asset:,.0f}",
-        f"📈 総PnL: ${total_pnl:,.0f} ({total_pnl_pct:+.1f}%)",
+        f"💰 合計: ¥{total_asset:,.0f}",
+        f"📈 総PnL: ¥{total_pnl:,.0f} ({total_pnl_pct:+.1f}%)",
         f"🤖 稼働: {active_count}/{len(BOT_NAMES)}",
     ])
 
