@@ -384,3 +384,16 @@ def get_latest_derivative(symbol):
         return dict(row) if row else None
     finally:
         conn.close()
+
+
+def get_recent_trades_all(since):
+    """指定時刻以降の全Botの取引履歴を取得する。"""
+    conn = get_connection()
+    try:
+        cursor = conn.execute(
+            "SELECT * FROM trades WHERE timestamp >= ? ORDER BY timestamp ASC",
+            (since,),
+        )
+        return [dict(r) for r in cursor.fetchall()]
+    finally:
+        conn.close()

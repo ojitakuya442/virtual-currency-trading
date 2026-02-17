@@ -1,0 +1,329 @@
+﻿fetch-and-train	Set up job	・ｿ2026-02-17T17:57:53.9402591Z Current runner version: '2.331.0'
+fetch-and-train	Set up job	2026-02-17T17:57:53.9427034Z ##[group]Runner Image Provisioner
+fetch-and-train	Set up job	2026-02-17T17:57:53.9427860Z Hosted Compute Agent
+fetch-and-train	Set up job	2026-02-17T17:57:53.9428409Z Version: 20260123.484
+fetch-and-train	Set up job	2026-02-17T17:57:53.9429060Z Commit: 6bd6555ca37d84114959e1c76d2c01448ff61c5d
+fetch-and-train	Set up job	2026-02-17T17:57:53.9429802Z Build Date: 2026-01-23T19:41:17Z
+fetch-and-train	Set up job	2026-02-17T17:57:53.9430417Z Worker ID: {242cb33f-4754-448e-9d2c-4ee5d2b5ca01}
+fetch-and-train	Set up job	2026-02-17T17:57:53.9431149Z Azure Region: eastus
+fetch-and-train	Set up job	2026-02-17T17:57:53.9431702Z ##[endgroup]
+fetch-and-train	Set up job	2026-02-17T17:57:53.9433010Z ##[group]Operating System
+fetch-and-train	Set up job	2026-02-17T17:57:53.9434043Z Ubuntu
+fetch-and-train	Set up job	2026-02-17T17:57:53.9434565Z 24.04.3
+fetch-and-train	Set up job	2026-02-17T17:57:53.9435025Z LTS
+fetch-and-train	Set up job	2026-02-17T17:57:53.9435498Z ##[endgroup]
+fetch-and-train	Set up job	2026-02-17T17:57:53.9436031Z ##[group]Runner Image
+fetch-and-train	Set up job	2026-02-17T17:57:53.9436546Z Image: ubuntu-24.04
+fetch-and-train	Set up job	2026-02-17T17:57:53.9437098Z Version: 20260209.23.1
+fetch-and-train	Set up job	2026-02-17T17:57:53.9438142Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260209.23/images/ubuntu/Ubuntu2404-Readme.md
+fetch-and-train	Set up job	2026-02-17T17:57:53.9439833Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260209.23
+fetch-and-train	Set up job	2026-02-17T17:57:53.9440725Z ##[endgroup]
+fetch-and-train	Set up job	2026-02-17T17:57:53.9441850Z ##[group]GITHUB_TOKEN Permissions
+fetch-and-train	Set up job	2026-02-17T17:57:53.9443998Z Contents: write
+fetch-and-train	Set up job	2026-02-17T17:57:53.9444635Z Metadata: read
+fetch-and-train	Set up job	2026-02-17T17:57:53.9445177Z ##[endgroup]
+fetch-and-train	Set up job	2026-02-17T17:57:53.9447689Z Secret source: Actions
+fetch-and-train	Set up job	2026-02-17T17:57:53.9448629Z Prepare workflow directory
+fetch-and-train	Set up job	2026-02-17T17:57:53.9770901Z Prepare all required actions
+fetch-and-train	Set up job	2026-02-17T17:57:53.9809738Z Getting action download info
+fetch-and-train	Set up job	2026-02-17T17:57:54.2890806Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+fetch-and-train	Set up job	2026-02-17T17:57:54.4054118Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+fetch-and-train	Set up job	2026-02-17T17:57:54.5936007Z Complete job name: fetch-and-train
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・・ｿ2026-02-17T17:57:54.6625048Z ##[group]Run actions/checkout@v4
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6625884Z with:
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6626271Z   fetch-depth: 0
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6626759Z   repository: ojitakuya442/virtual-currency-trading
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6627570Z   token: ***
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6628172Z   ssh-strict: true
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6628770Z   ssh-user: git
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6629328Z   persist-credentials: true
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6629976Z   clean: true
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6630653Z   sparse-checkout-cone-mode: true
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6631594Z   fetch-tags: false
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6632288Z   show-progress: true
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6633036Z   lfs: false
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6633831Z   submodules: false
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6634492Z   set-safe-directory: true
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.6635414Z ##[endgroup]
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7714757Z Syncing repository: ojitakuya442/virtual-currency-trading
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7716619Z ##[group]Getting Git version info
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7717482Z Working directory is '/home/runner/work/virtual-currency-trading/virtual-currency-trading'
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7718661Z [command]/usr/bin/git version
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7723541Z git version 2.52.0
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7750163Z ##[endgroup]
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7764440Z Temporarily overriding HOME='/home/runner/work/_temp/027e172a-33f1-4ef4-895e-e3e9d8c60acc' before making global git config changes
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7765812Z Adding repository directory to the temporary git global config as a safe directory
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7777219Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/virtual-currency-trading/virtual-currency-trading
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7817697Z Deleting the contents of '/home/runner/work/virtual-currency-trading/virtual-currency-trading'
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7821280Z ##[group]Initializing the repository
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7825708Z [command]/usr/bin/git init /home/runner/work/virtual-currency-trading/virtual-currency-trading
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7929291Z hint: Using 'master' as the name for the initial branch. This default branch name
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7930550Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7931675Z hint: to use in all of your new repositories, which will suppress this warning,
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7932351Z hint: call:
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7932693Z hint:
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7933156Z hint: 	git config --global init.defaultBranch <name>
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7933970Z hint:
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7934768Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7936303Z hint: 'development'. The just-created branch can be renamed via this command:
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7937530Z hint:
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7938289Z hint: 	git branch -m <name>
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7939252Z hint:
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7940087Z hint: Disable this message with "git config set advice.defaultBranchName false"
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7941248Z Initialized empty Git repository in /home/runner/work/virtual-currency-trading/virtual-currency-trading/.git/
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7949610Z [command]/usr/bin/git remote add origin https://github.com/ojitakuya442/virtual-currency-trading
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7985097Z ##[endgroup]
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7985821Z ##[group]Disabling automatic garbage collection
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.7988905Z [command]/usr/bin/git config --local gc.auto 0
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8018067Z ##[endgroup]
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8018734Z ##[group]Setting up auth
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8024561Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8056193Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8407143Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8439835Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8670085Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8711332Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8949770Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8985828Z ##[endgroup]
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8987074Z ##[group]Fetching the repository
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:54.8995429Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1309484Z From https://github.com/ojitakuya442/virtual-currency-trading
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1310486Z  * [new branch]      main       -> origin/main
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1351275Z [command]/usr/bin/git branch --list --remote origin/main
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1377296Z   origin/main
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1386262Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1407115Z d8d88f329789db026f4ab92466667ab7d7c2a7ab
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1412010Z ##[endgroup]
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1413082Z ##[group]Determining the checkout info
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1414481Z ##[endgroup]
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1417536Z [command]/usr/bin/git sparse-checkout disable
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1457201Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1483519Z ##[group]Checking out the ref
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1487883Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1563222Z Switched to a new branch 'main'
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1566448Z branch 'main' set up to track 'origin/main'.
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1572297Z ##[endgroup]
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1606958Z [command]/usr/bin/git log -1 --format=%H
+fetch-and-train	繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:57:55.1631603Z d8d88f329789db026f4ab92466667ab7d7c2a7ab
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	・ｿ2026-02-17T17:57:55.1874462Z ##[group]Run actions/setup-python@v5
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.1875044Z with:
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.1875627Z   python-version: 3.11
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.1876035Z   cache: pip
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.1876400Z   check-latest: false
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.1876935Z   token: ***
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.1877316Z   update-environment: true
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.1877769Z   allow-prereleases: false
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.1878190Z   freethreaded: false
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.1878566Z ##[endgroup]
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.3560397Z ##[group]Installed versions
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.3694617Z Successfully set up CPython (3.11.14)
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.3696077Z ##[endgroup]
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.4368266Z [command]/opt/hostedtoolcache/Python/3.11.14/x64/bin/pip cache dir
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.7664108Z /home/runner/.cache/pip
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:55.8801610Z Cache hit for: setup-python-Linux-x64-24.04-Ubuntu-python-3.11.14-pip-d2113a7c05a131f367cb2432e0a54940ee0ad823687c5483aa437ab0b06105ba
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:56.4559283Z Received 97213458 of 97213458 (100.0%), 180.0 MBs/sec
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:56.4560955Z Cache Size: ~93 MB (97213458 B)
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:56.4592490Z [command]/usr/bin/tar -xf /home/runner/work/_temp/8ca7a6b9-6cbb-4c26-ac2a-8aeb6ad923d5/cache.tzst -P -C /home/runner/work/virtual-currency-trading/virtual-currency-trading --use-compress-program unzstd
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:56.6262710Z Cache restored successfully
+fetch-and-train	Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:57:56.6459957Z Cache restored from key: setup-python-Linux-x64-24.04-Ubuntu-python-3.11.14-pip-d2113a7c05a131f367cb2432e0a54940ee0ad823687c5483aa437ab0b06105ba
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	・ｿ2026-02-17T17:57:56.6652053Z ##[group]Run pip install -r requirements.txt
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:56.6652719Z [36;1mpip install -r requirements.txt[0m
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:56.6710382Z shell: /usr/bin/bash -e {0}
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:56.6710698Z env:
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:56.6710992Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:56.6711428Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:56.6711874Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:56.6712262Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:56.6712670Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:56.6713044Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:56.6713354Z ##[endgroup]
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.4244149Z Collecting ccxt>=4.0.0 (from -r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.4260408Z   Using cached ccxt-4.5.38-py2.py3-none-any.whl.metadata (139 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.5270452Z Collecting pandas>=2.0.0 (from -r requirements.txt (line 2))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.5286169Z   Using cached pandas-3.0.0-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (79 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.7324870Z Collecting numpy>=1.24.0 (from -r requirements.txt (line 3))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.7340437Z   Using cached numpy-2.4.2-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.7519577Z Collecting requests>=2.31.0 (from -r requirements.txt (line 4))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.7540672Z   Using cached requests-2.32.5-py3-none-any.whl.metadata (4.9 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.7682699Z Collecting python-dotenv>=1.0.0 (from -r requirements.txt (line 5))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.7696013Z   Using cached python_dotenv-1.2.1-py3-none-any.whl.metadata (25 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.8422812Z Collecting scikit-learn>=1.3.0 (from -r requirements.txt (line 6))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.8446124Z   Using cached scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (11 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.8657371Z Collecting lightgbm>=4.0.0 (from -r requirements.txt (line 7))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.8676510Z   Using cached lightgbm-4.6.0-py3-none-manylinux_2_28_x86_64.whl.metadata (17 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.8707882Z Requirement already satisfied: setuptools>=60.9.0 in /opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages (from ccxt>=4.0.0->-r requirements.txt (line 1)) (79.0.1)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.8849747Z Collecting certifi>=2018.1.18 (from ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:57.8863941Z   Using cached certifi-2026.1.4-py3-none-any.whl.metadata (2.5 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.0437675Z Collecting cryptography>=2.6.1 (from ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.0453571Z   Using cached cryptography-46.0.5-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (5.7 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.0626107Z Collecting typing_extensions>=4.4.0 (from ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.0640528Z   Using cached typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.5237186Z Collecting aiohttp>=3.10.11 (from ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.5254274Z   Using cached aiohttp-3.13.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.1 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.5369230Z Collecting aiodns>=1.1.1 (from ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.5383897Z   Using cached aiodns-4.0.0-py3-none-any.whl.metadata (7.7 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.7907010Z Collecting yarl>=1.7.2 (from ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.7922034Z   Using cached yarl-1.22.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (75 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.8380063Z Collecting coincurve==21.0.0 (from ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.8393789Z   Using cached coincurve-21.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.0 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.8540885Z Collecting python-dateutil>=2.8.2 (from pandas>=2.0.0->-r requirements.txt (line 2))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.8559109Z   Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.9267669Z Collecting charset_normalizer<4,>=2 (from requests>=2.31.0->-r requirements.txt (line 4))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.9287417Z   Using cached charset_normalizer-3.4.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (37 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.9423929Z Collecting idna<4,>=2.5 (from requests>=2.31.0->-r requirements.txt (line 4))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.9442725Z   Using cached idna-3.11-py3-none-any.whl.metadata (8.4 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.9678587Z Collecting urllib3<3,>=1.21.1 (from requests>=2.31.0->-r requirements.txt (line 4))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:58.9691981Z   Using cached urllib3-2.6.3-py3-none-any.whl.metadata (6.9 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.1626445Z Collecting scipy>=1.10.0 (from scikit-learn>=1.3.0->-r requirements.txt (line 6))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.1649922Z   Using cached scipy-1.17.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.1993051Z Collecting joblib>=1.3.0 (from scikit-learn>=1.3.0->-r requirements.txt (line 6))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.2006551Z   Using cached joblib-1.5.3-py3-none-any.whl.metadata (5.5 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.2105525Z Collecting threadpoolctl>=3.2.0 (from scikit-learn>=1.3.0->-r requirements.txt (line 6))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.2118469Z   Using cached threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.2799245Z Collecting pycares<6,>=5.0.0 (from aiodns>=1.1.1->ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.2813340Z   Using cached pycares-5.0.1-cp311-cp311-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl.metadata (4.1 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.3694121Z Collecting cffi>=1.5.0 (from pycares<6,>=5.0.0->aiodns>=1.1.1->ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.3708107Z   Using cached cffi-2.0.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.3822994Z Collecting aiohappyeyeballs>=2.5.0 (from aiohttp>=3.10.11->ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.3836859Z   Using cached aiohappyeyeballs-2.6.1-py3-none-any.whl.metadata (5.9 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.3948395Z Collecting aiosignal>=1.4.0 (from aiohttp>=3.10.11->ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.3961290Z   Using cached aiosignal-1.4.0-py3-none-any.whl.metadata (3.7 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.4086900Z Collecting attrs>=17.3.0 (from aiohttp>=3.10.11->ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.4099995Z   Using cached attrs-25.4.0-py3-none-any.whl.metadata (10 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.4680483Z Collecting frozenlist>=1.1.1 (from aiohttp>=3.10.11->ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.4695358Z   Using cached frozenlist-1.8.0-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (20 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.7329465Z Collecting multidict<7.0,>=4.5 (from aiohttp>=3.10.11->ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.7346363Z   Using cached multidict-6.7.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (5.3 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.7826713Z Collecting propcache>=0.2.0 (from aiohttp>=3.10.11->ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.7841292Z   Using cached propcache-0.4.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (13 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8069968Z Collecting pycparser (from cffi>=1.5.0->pycares<6,>=5.0.0->aiodns>=1.1.1->ccxt>=4.0.0->-r requirements.txt (line 1))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8084917Z   Using cached pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8224508Z Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas>=2.0.0->-r requirements.txt (line 2))
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8238078Z   Using cached six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8356197Z Using cached ccxt-4.5.38-py2.py3-none-any.whl (6.5 MB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8415400Z Using cached coincurve-21.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.6 MB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8440017Z Using cached pandas-3.0.0-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (11.2 MB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8529325Z Using cached numpy-2.4.2-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8656902Z Using cached requests-2.32.5-py3-none-any.whl (64 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8671460Z Using cached charset_normalizer-3.4.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (151 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8685736Z Using cached idna-3.11-py3-none-any.whl (71 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8699445Z Using cached urllib3-2.6.3-py3-none-any.whl (131 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8713461Z Using cached python_dotenv-1.2.1-py3-none-any.whl (21 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8727646Z Using cached scikit_learn-1.8.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (9.1 MB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8803068Z Using cached lightgbm-4.6.0-py3-none-manylinux_2_28_x86_64.whl (3.6 MB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8841504Z Using cached aiodns-4.0.0-py3-none-any.whl (11 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8855374Z Using cached pycares-5.0.1-cp311-cp311-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl (222 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8870354Z Using cached aiohttp-3.13.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (1.7 MB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8896085Z Using cached multidict-6.7.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (246 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8911068Z Using cached yarl-1.22.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (365 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8926869Z Using cached aiohappyeyeballs-2.6.1-py3-none-any.whl (15 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8940446Z Using cached aiosignal-1.4.0-py3-none-any.whl (7.5 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8953874Z Using cached attrs-25.4.0-py3-none-any.whl (67 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8967737Z Using cached certifi-2026.1.4-py3-none-any.whl (152 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8982172Z Using cached cffi-2.0.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (215 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.8996984Z Using cached cryptography-46.0.5-cp311-abi3-manylinux_2_34_x86_64.whl (4.5 MB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.9041273Z Using cached frozenlist-1.8.0-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (231 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.9055800Z Using cached joblib-1.5.3-py3-none-any.whl (309 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.9071879Z Using cached propcache-0.4.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (210 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.9086664Z Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.9101526Z Using cached scipy-1.17.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.1 MB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.9380864Z Using cached six-1.17.0-py2.py3-none-any.whl (11 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.9394941Z Using cached threadpoolctl-3.6.0-py3-none-any.whl (18 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.9408544Z Using cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:57:59.9422560Z Using cached pycparser-3.0-py3-none-any.whl (48 kB)
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:58:00.1436770Z Installing collected packages: urllib3, typing_extensions, threadpoolctl, six, python-dotenv, pycparser, propcache, numpy, multidict, joblib, idna, frozenlist, coincurve, charset_normalizer, certifi, attrs, aiohappyeyeballs, yarl, scipy, requests, python-dateutil, cffi, aiosignal, scikit-learn, pycares, pandas, lightgbm, cryptography, aiohttp, aiodns, ccxt
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:58:15.9309809Z 
+fetch-and-train	萓晏ｭ倥ヱ繝・こ繝ｼ繧ｸ繧､繝ｳ繧ｹ繝医・繝ｫ	2026-02-17T17:58:15.9330391Z Successfully installed aiodns-4.0.0 aiohappyeyeballs-2.6.1 aiohttp-3.13.3 aiosignal-1.4.0 attrs-25.4.0 ccxt-4.5.38 certifi-2026.1.4 cffi-2.0.0 charset_normalizer-3.4.4 coincurve-21.0.0 cryptography-46.0.5 frozenlist-1.8.0 idna-3.11 joblib-1.5.3 lightgbm-4.6.0 multidict-6.7.1 numpy-2.4.2 pandas-3.0.0 propcache-0.4.1 pycares-5.0.1 pycparser-3.0 python-dateutil-2.9.0.post0 python-dotenv-1.2.1 requests-2.32.5 scikit-learn-1.8.0 scipy-1.17.0 six-1.17.0 threadpoolctl-3.6.0 typing_extensions-4.15.0 urllib3-2.6.3 yarl-1.22.0
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・・ｿ2026-02-17T17:58:16.3442812Z ##[group]Run python scripts/fetch_historical.py
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.3443217Z [36;1mpython scripts/fetch_historical.py[0m
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.3495227Z shell: /usr/bin/bash -e {0}
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.3495473Z env:
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.3495719Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.3496151Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.3496584Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.3496966Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.3497337Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.3497704Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.3498012Z ##[endgroup]
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.9836641Z 2026-02-17 17:58:16,983 [INFO] __main__: ============================================================
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.9837843Z 2026-02-17 17:58:16,983 [INFO] __main__: 驕主悉30譌･蛻・・繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ繧貞叙蠕励＠縺ｾ縺・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.9838705Z 2026-02-17 17:58:16,983 [INFO] __main__: ============================================================
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.9918124Z 2026-02-17 17:58:16,991 [INFO] src.database: 繝・・繧ｿ繝吶・繧ｹ繧貞・譛溷喧縺励∪縺励◆縲・10 bots)
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.9944376Z 2026-02-17 17:58:16,994 [INFO] __main__: 
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.9944723Z --- BTC/USD ---
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:16.9946413Z 2026-02-17 17:58:16,994 [INFO] src.data_collector: [BTC/USD] 驕主悉30譌･蛻・・繝・・繧ｿ繧貞叙蠕嶺ｸｭ...
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:20.5292670Z 2026-02-17 17:58:20,528 [INFO] src.data_collector: [BTC/USD] 721莉ｶ縺ｮ繝・・繧ｿ繧貞叙蠕怜ｮ御ｺ・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:20.6197151Z 2026-02-17 17:58:20,619 [INFO] src.database: 721莉ｶ縺ｮ萓｡譬ｼ繝・・繧ｿ繧剃ｿ晏ｭ倥＠縺ｾ縺励◆縲・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:20.6207452Z 2026-02-17 17:58:20,620 [INFO] __main__: [BTC/USD] 721莉ｶ菫晏ｭ伜ｮ御ｺ・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:20.6208016Z 2026-02-17 17:58:20,620 [INFO] __main__: 
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:20.6208463Z --- ETH/USD ---
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:20.6209208Z 2026-02-17 17:58:20,620 [INFO] src.data_collector: [ETH/USD] 驕主悉30譌･蛻・・繝・・繧ｿ繧貞叙蠕嶺ｸｭ...
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:23.1540374Z 2026-02-17 17:58:23,153 [INFO] src.data_collector: [ETH/USD] 721莉ｶ縺ｮ繝・・繧ｿ繧貞叙蠕怜ｮ御ｺ・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:23.2014659Z 2026-02-17 17:58:23,201 [INFO] src.database: 721莉ｶ縺ｮ萓｡譬ｼ繝・・繧ｿ繧剃ｿ晏ｭ倥＠縺ｾ縺励◆縲・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:23.2025311Z 2026-02-17 17:58:23,202 [INFO] __main__: [ETH/USD] 721莉ｶ菫晏ｭ伜ｮ御ｺ・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:23.2025839Z 2026-02-17 17:58:23,202 [INFO] __main__: 
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:23.2026127Z --- SOL/USD ---
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:23.2026703Z 2026-02-17 17:58:23,202 [INFO] src.data_collector: [SOL/USD] 驕主悉30譌･蛻・・繝・・繧ｿ繧貞叙蠕嶺ｸｭ...
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:25.5516347Z 2026-02-17 17:58:25,551 [INFO] src.data_collector: [SOL/USD] 721莉ｶ縺ｮ繝・・繧ｿ繧貞叙蠕怜ｮ御ｺ・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:25.5981490Z 2026-02-17 17:58:25,597 [INFO] src.database: 721莉ｶ縺ｮ萓｡譬ｼ繝・・繧ｿ繧剃ｿ晏ｭ倥＠縺ｾ縺励◆縲・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:25.5995905Z 2026-02-17 17:58:25,599 [INFO] __main__: [SOL/USD] 721莉ｶ菫晏ｭ伜ｮ御ｺ・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:25.5996425Z 2026-02-17 17:58:25,599 [INFO] __main__: 
+fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:25.5996872Z 蜷郁ｨ・2163莉ｶ縺ｮ繝・・繧ｿ繧剃ｿ晏ｭ倥＠縺ｾ縺励◆縲・fetch-and-train	繝偵せ繝医Μ繧ｫ繝ｫ繝・・繧ｿ蜿門ｾ・2026-02-17T17:58:25.5997324Z 2026-02-17 17:58:25,599 [INFO] __main__: 螳御ｺ・
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	・ｿ2026-02-17T17:58:25.7202063Z ##[group]Run python -c "
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7202365Z [36;1mpython -c "[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7202668Z [36;1mfrom src.database import init_database, get_recent_prices[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7203060Z [36;1mfrom src.indicators import add_core_indicators[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7203388Z [36;1mfrom src.config import BOT_CONFIGS[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7203871Z [36;1mfrom src.bots.bot_09_ml_gate import BotMLGate[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7204187Z [36;1mimport pandas as pd[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7204399Z [36;1m[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7204567Z [36;1minit_database()[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7204807Z [36;1mbot = BotMLGate(BOT_CONFIGS['09_ml_gate'])[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7205075Z [36;1m[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7205269Z [36;1mfor symbol in ['BTC/USDT', 'ETH/USDT']:[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7205581Z [36;1m    rows = get_recent_prices(symbol, limit=10000)[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7205853Z [36;1m    if rows:[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7206060Z [36;1m        df = pd.DataFrame(rows)[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7206399Z [36;1m        for col in ['open','high','low','close','volume']:[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7206731Z [36;1m            df[col] = df[col].astype(float)[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7207013Z [36;1m        df = add_core_indicators(df)[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7207272Z [36;1m        bot.train(df, symbol)[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7207516Z [36;1m        print(f'{symbol} 蟄ｦ鄙貞ｮ御ｺ・)[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7207754Z [36;1m"[0m
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7257339Z shell: /usr/bin/bash -e {0}
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7257585Z env:
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7257842Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7258265Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7258667Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7259023Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7259381Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7259733Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+fetch-and-train	ML莠句燕蟄ｦ鄙・(Bot	2026-02-17T17:58:25.7260046Z ##[endgroup]
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・・ｿ2026-02-17T17:58:27.1764253Z ##[group]Run git config user.name "github-actions[bot]"
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1764709Z [36;1mgit config user.name "github-actions[bot]"[0m
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1765120Z [36;1mgit config user.email "github-actions[bot]@users.noreply.github.com"[0m
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1765570Z [36;1mgit add -f data/*.db data/*.sqlite* models/ || true[0m
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1766007Z [36;1mgit diff --cached --quiet || git commit -m "投 蛻晄悄繝・・繧ｿ + ML繝｢繝・Ν菫晏ｭ・[0m
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1766384Z [36;1mgit pull --rebase origin main || true[0m
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1766646Z [36;1mgit push[0m
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1816566Z shell: /usr/bin/bash -e {0}
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1816799Z env:
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1817051Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1817474Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib/pkgconfig
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1817874Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1818231Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1818631Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.14/x64
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1819002Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.14/x64/lib
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1819324Z ##[endgroup]
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.1938604Z fatal: pathspec 'data/*.sqlite*' did not match any files
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.3378800Z From https://github.com/ojitakuya442/virtual-currency-trading
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.3379522Z  * branch            main       -> FETCH_HEAD
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.3449490Z Already up to date.
+fetch-and-train	繝・・繧ｿ繝ｻ繝｢繝・Ν繧偵さ繝溘ャ繝・2026-02-17T17:58:27.4524349Z Everything up-to-date
+fetch-and-train	Post Python 繧ｻ繝・ヨ繧｢繝・・	・ｿ2026-02-17T17:58:27.4628651Z Post job cleanup.
+fetch-and-train	Post Python 繧ｻ繝・ヨ繧｢繝・・	2026-02-17T17:58:27.6127735Z Cache hit occurred on the primary key setup-python-Linux-x64-24.04-Ubuntu-python-3.11.14-pip-d2113a7c05a131f367cb2432e0a54940ee0ad823687c5483aa437ab0b06105ba, not saving cache.
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・・ｿ2026-02-17T17:58:27.6248251Z Post job cleanup.
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7193918Z [command]/usr/bin/git version
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7230899Z git version 2.52.0
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7273199Z Temporarily overriding HOME='/home/runner/work/_temp/597085f2-a3a6-4126-b12a-50a08ea0f1eb' before making global git config changes
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7274775Z Adding repository directory to the temporary git global config as a safe directory
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7286050Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/virtual-currency-trading/virtual-currency-trading
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7320789Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7353765Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7595010Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7618478Z http.https://github.com/.extraheader
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7635330Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7672020Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7936029Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+fetch-and-train	Post 繝√ぉ繝・け繧｢繧ｦ繝・2026-02-17T17:58:27.7971618Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+fetch-and-train	Complete job	・ｿ2026-02-17T17:58:27.8344207Z Cleaning up orphan processes
