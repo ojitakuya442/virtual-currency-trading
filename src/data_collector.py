@@ -1,6 +1,6 @@
 """
 仮想通貨自動売買Bot - データ収集モジュール
-Binance公開APIからの価格データ取得 + Futures API（funding/OI）対応。
+Bybit公開APIからの価格データ取得 + Futures API（funding/OI）対応。
 """
 import time
 import logging
