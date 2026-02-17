@@ -6,7 +6,7 @@ import logging
 from datetime import datetime, timezone
 
 from src.config import (
-    INITIAL_BALANCE, TOTAL_COST_RATE, USDT_JPY_RATE,
+    INITIAL_BALANCE, TOTAL_COST_RATE, USD_JPY_RATE,
     CIRCUIT_BREAKER_THRESHOLD, POSITION_CHANGE_THRESHOLD,
 )
 from src.database import (
@@ -63,8 +63,8 @@ class Simulator:
         if not self.is_active:
             return {"executed": False, "reason": "サーキットブレーカーにより停止中"}
 
-        # USDT→JPY変換
-        price_jpy = current_price * USDT_JPY_RATE
+        # USD→JPY変換
+        price_jpy = current_price * USD_JPY_RATE
 
         target_pos = signal.get("target_position", 0.0)
         confidence = signal.get("confidence", 0.0)
@@ -195,17 +195,17 @@ class Simulator:
             "prev_pos": prev_pos, "target_pos": target_pos,
         }
 
-    def _total_asset_jpy(self, current_prices_usdt: dict) -> float:
-        """総資産(円)を計算する。current_pricesはUSDT建て。"""
+    def _total_asset_jpy(self, current_prices_usd: dict) -> float:
+        """総資産(円)を計算する。current_pricesはUSD建て。"""
         position_value = 0
         for sym, qty in self.quantities.items():
-            if sym in current_prices_usdt and qty > 0:
-                position_value += qty * current_prices_usdt[sym] * USDT_JPY_RATE
+            if sym in current_prices_usd and qty > 0:
+                position_value += qty * current_prices_usd[sym] * USD_JPY_RATE
         return self.balance + position_value
 
-    def _check_circuit_breaker_jpy(self, current_prices_usdt: dict) -> bool:
+    def _check_circuit_breaker_jpy(self, current_prices_usd: dict) -> bool:
         """サーキットブレーカー判定。"""
-        total = self._total_asset_jpy(current_prices_usdt)
+        total = self._total_asset_jpy(current_prices_usd)
         loss_rate = (INITIAL_BALANCE - total) / INITIAL_BALANCE
         if loss_rate >= CIRCUIT_BREAKER_THRESHOLD:
             logger.warning(
@@ -216,9 +216,9 @@ class Simulator:
         return True
 
     def save_snapshot(self, current_prices: dict, trade_count: int = 0):
-        """残高スナップショット(円)を保存する。current_pricesはUSDT建て。"""
+        """残高スナップショット(円)を保存する。current_pricesはUSD建て。"""
         position_value = sum(
-            qty * current_prices.get(sym, 0) * USDT_JPY_RATE
+            qty * current_prices.get(sym, 0) * USD_JPY_RATE
             for sym, qty in self.quantities.items()
             if qty > 0
         )

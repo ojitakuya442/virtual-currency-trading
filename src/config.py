@@ -11,7 +11,7 @@ load_dotenv()
 # ============================================================
 # 対象銘柄
 # ============================================================
-SYMBOLS = ["BTC/USDT", "ETH/USDT", "SOL/USDT"]
+SYMBOLS = ["BTC/USD", "ETH/USD", "SOL/USD"]
 
 # ============================================================
 # 取引所設定
@@ -22,7 +22,7 @@ EXCHANGE_ID = "kraken"
 # 運用パラメータ
 # ============================================================
 INITIAL_BALANCE = 50_000         # 各ボットの初期仮想資産（円）
-USDT_JPY_RATE = 150.0            # USDT→JPY変換レート（概算）
+USD_JPY_RATE = 150.0            # USD→JPY変換レート（概算）
 TRADE_FEE_RATE = 0.001          # 取引手数料 (0.1% = taker)
 SLIPPAGE_RATE = 0.0005          # スリッページ (0.05%)
 TOTAL_COST_RATE = TRADE_FEE_RATE + SLIPPAGE_RATE  # 合計 0.15%
@@ -70,7 +70,7 @@ BOT_CONFIGS = {
     "01_donchian": {
         "name": "01_donchian",
         "description": "Donchian ブレイクアウト (トレンド追随)",
-        "symbols": ["BTC/USDT", "ETH/USDT"],
+        "symbols": ["BTC/USD", "ETH/USD"],
         "params": {
             "channel_period": 48,       # Donchian上限/下限の計算期間
             "atr_period": 14,
@@ -80,7 +80,7 @@ BOT_CONFIGS = {
     "02_ema_adx": {
         "name": "02_ema_adx",
         "description": "EMAトレンド + ADXフィルタ (ダマシ回避)",
-        "symbols": ["BTC/USDT", "ETH/USDT"],
+        "symbols": ["BTC/USD", "ETH/USD"],
         "params": {
             "ema_short": 12,
             "ema_long": 48,
@@ -91,7 +91,7 @@ BOT_CONFIGS = {
     "03_bb_zscore": {
         "name": "03_bb_zscore",
         "description": "ボリンジャー z-score 平均回帰 (レンジ取り)",
-        "symbols": ["BTC/USDT", "ETH/USDT"],
+        "symbols": ["BTC/USD", "ETH/USD"],
         "params": {
             "bb_period": 20,
             "bb_std": 2.0,
@@ -106,7 +106,7 @@ BOT_CONFIGS = {
     "04_vwap": {
         "name": "04_vwap",
         "description": "VWAPアンカー (回帰/順張り切替)",
-        "symbols": ["BTC/USDT", "ETH/USDT"],
+        "symbols": ["BTC/USD", "ETH/USD"],
         "params": {
             "vwap_period": 48,          # ローリングVWAP期間
             "deviation_threshold": 0.01, # 乖離率閾値 (1%)
@@ -116,7 +116,7 @@ BOT_CONFIGS = {
     "05_squeeze": {
         "name": "05_squeeze",
         "description": "ボラ収縮→拡大ブレイク (爆発待ち)",
-        "symbols": ["BTC/USDT", "ETH/USDT", "SOL/USDT"],
+        "symbols": ["BTC/USD", "ETH/USD", "SOL/USD"],
         "params": {
             "bb_period": 20,
             "bb_std": 2.0,
@@ -129,7 +129,7 @@ BOT_CONFIGS = {
     "06_vol_momentum": {
         "name": "06_vol_momentum",
         "description": "出来高×リターンモメンタム",
-        "symbols": ["BTC/USDT", "ETH/USDT", "SOL/USDT"],
+        "symbols": ["BTC/USD", "ETH/USD", "SOL/USD"],
         "params": {
             "momentum_period": 12,      # モメンタム算出期間
             "volume_zscore_period": 48,  # 出来高z-scoreの期間
@@ -140,7 +140,7 @@ BOT_CONFIGS = {
     "07_pair_trade": {
         "name": "07_pair_trade",
         "description": "ペアトレ BTC-ETH (相対価格の歪み取り)",
-        "symbols": ["BTC/USDT", "ETH/USDT"],
+        "symbols": ["BTC/USD", "ETH/USD"],
         "params": {
             "spread_period": 48,        # スプレッドの平均算出期間
             "zscore_entry": 2.0,        # エントリーz-score
@@ -151,7 +151,7 @@ BOT_CONFIGS = {
     "08_regime": {
         "name": "08_regime",
         "description": "レジーム判定→戦略切替 (メタbot)",
-        "symbols": ["BTC/USDT", "ETH/USDT"],
+        "symbols": ["BTC/USD", "ETH/USD"],
         "params": {
             "volatility_window": 24,
             "trend_window": 48,
@@ -161,7 +161,7 @@ BOT_CONFIGS = {
     "09_ml_gate": {
         "name": "09_ml_gate",
         "description": "MLゲート (LightGBM フィルタ)",
-        "symbols": ["BTC/USDT", "ETH/USDT"],
+        "symbols": ["BTC/USD", "ETH/USD"],
         "params": {
             "retrain_interval_hours": 24,   # 再学習間隔
             "train_window_bars": 4032,      # 学習窓 (14日×288本/日)
@@ -173,7 +173,7 @@ BOT_CONFIGS = {
     "10_deriv": {
         "name": "10_deriv",
         "description": "デリバ情報併用 (Funding/OI環境変数)",
-        "symbols": ["BTC/USDT", "ETH/USDT"],
+        "symbols": ["BTC/USD", "ETH/USD"],
         "params": {
             "funding_extreme_pct": 0.01,   # Funding rate過熱閾値 (1%)
             "oi_change_threshold": 0.10,   # OI変動率閾値 (10%)
