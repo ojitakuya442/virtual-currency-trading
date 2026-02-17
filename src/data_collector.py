@@ -60,6 +60,27 @@ def fetch_current_prices(exchange=None):
     return results
 
 
+def fetch_usd_jpy_rate(exchange=None):
+    """
+    Krakenから現在のUSD/JPYレートを取得する。
+    取得できない場合は config.USD_JPY_RATE (固定値) を返す。
+    """
+    from src.config import USD_JPY_TICKER, USD_JPY_RATE
+
+    if exchange is None:
+        exchange = create_exchange()
+
+    try:
+        ticker = exchange.fetch_ticker(USD_JPY_TICKER)
+        price = ticker["last"]
+        if price and price > 0:
+            return price
+    except Exception as e:
+        logger.warning(f"USD/JPYレート取得エラー: {e}")
+    
+    return USD_JPY_RATE  # フォールバック
+
+
 def fetch_ohlcv(exchange, symbol, timeframe="5m", since=None, limit=500):
     """
     指定銘柄のOHLCVデータを取得する。
