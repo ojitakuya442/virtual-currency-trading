@@ -1,0 +1,42 @@
+name: 自動売買Bot実行 (5分間隔)
+
+on:
+  schedule:
+    # 5分ごとに実行 (UTC)
+    - cron: "*/5 * * * *"
+  workflow_dispatch:  # 手動実行も可能
+
+permissions:
+  contents: write  # DBファイルをコミットするため
+
+jobs:
+  run-bots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4  # 次の実行と被らないよう制限
+
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: 依存パッケージインストール
+        run: pip install -r requirements.txt
+
+      - name: Bot実行
+        env:
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+        run: python scripts/run_bots.py
+
+      - name: DB変更をコミット
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/trading_bot.db models/ || true
+          git diff --cached --quiet || git commit -m "🤖 bot実行結果を保存 $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push || echo "Push failed (conflict), will retry next run"

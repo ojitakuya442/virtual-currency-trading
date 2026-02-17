@@ -1,0 +1,39 @@
+# Environment variables (API keys, tokens)
+.env
+
+# Database files
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Models (trained ML models)
+models/*.pkl
+models/*.joblib
+models/*.onnx
+
+# Logs
+*.log

@@ -1,0 +1,59 @@
+name: ヒストリカルデータ取得 + ML事前学習
+
+on:
+  workflow_dispatch:  # 手動実行のみ（初回セットアップ用）
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: チェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: 依存パッケージインストール
+        run: pip install -r requirements.txt
+
+      - name: ヒストリカルデータ取得
+        run: python scripts/fetch_historical.py
+
+      - name: ML事前学習 (Bot #09)
+        run: |
+          python -c "
+          from src.database import init_database, get_recent_prices
+          from src.indicators import add_core_indicators
+          from src.config import BOT_CONFIGS
+          from src.bots.bot_09_ml_gate import BotMLGate
+          import pandas as pd
+
+          init_database()
+          bot = BotMLGate(BOT_CONFIGS['09_ml_gate'])
+
+          for symbol in ['BTC/USDT', 'ETH/USDT']:
+              rows = get_recent_prices(symbol, limit=10000)
+              if rows:
+                  df = pd.DataFrame(rows)
+                  for col in ['open','high','low','close','volume']:
+                      df[col] = df[col].astype(float)
+                  df = add_core_indicators(df)
+                  bot.train(df, symbol)
+                  print(f'{symbol} 学習完了')
+          "
+
+      - name: データ・モデルをコミット
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ models/ || true
+          git diff --cached --quiet || git commit -m "📊 初期データ + MLモデル保存"
+          git push
