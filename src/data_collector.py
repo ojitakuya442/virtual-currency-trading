@@ -1,6 +1,6 @@
 """
 仮想通貨自動売買Bot - データ収集モジュール
-Bybit公開APIからの価格データ取得 + Futures API（funding/OI）対応。
+Kraken公開APIからの価格データ取得 + Futures API（funding/OI）対応。
 """
 import time
 import logging
@@ -27,12 +27,19 @@ def create_exchange():
 
 def create_futures_exchange():
     """CCXT先物取引所インスタンスを生成する（funding/OI取得用）。"""
-    exchange_class = getattr(ccxt, EXCHANGE_ID)
-    exchange = exchange_class({
-        "enableRateLimit": True,
-        "options": {"defaultType": "future"},
-    })
-    return exchange
+    try:
+        exchange = ccxt.krakenfutures({
+            "enableRateLimit": True,
+        })
+        return exchange
+    except Exception:
+        # fallback: 同一取引所で future オプション
+        exchange_class = getattr(ccxt, EXCHANGE_ID)
+        exchange = exchange_class({
+            "enableRateLimit": True,
+            "options": {"defaultType": "future"},
+        })
+        return exchange
 
 
 def fetch_current_prices(exchange=None):
@@ -133,7 +140,7 @@ def fetch_historical_data(exchange, symbol, days=30, timeframe="5m"):
 
 def fetch_funding_rate(exchange_futures=None, symbol="BTC/USDT"):
     """
-    Funding rate を取得する (Binance Futures)。
+    Funding rate を取得する (Kraken Futures)。
 
     Returns:
         dict: {"funding_rate": float, "timestamp": str} or None
@@ -165,7 +172,7 @@ def fetch_open_interest(exchange_futures=None, symbol="BTC/USDT"):
         exchange_futures = create_futures_exchange()
 
     try:
-        # Binance Futures の OI 取得
+        # Kraken Futures の OI 取得
         oi = exchange_futures.fetch_open_interest(symbol)
         return {
             "open_interest": oi.get("openInterestAmount", 0),
