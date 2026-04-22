@@ -116,6 +116,9 @@ def main():
     # ── Step 3 & 4: 各Botシグナル計算 → ポジション調整 ──
     logger.info(f"🤖 {len(BOT_NAMES)}bot のシグナルを計算中...")
 
+    # 全銘柄のUSD価格dict (循環ブレーカー判定で全ポジション評価に使用)
+    all_prices_usd = {s: d["price"] for s, d in current_prices.items()}
+
     results = {}
     for bot_name in BOT_NAMES:
         try:
@@ -132,7 +135,7 @@ def main():
             for symbol, signal in signals.items():
                 if symbol in current_prices:
                     price = current_prices[symbol]["price"]
-                    result = sim.apply_signal(symbol, signal, price)
+                    result = sim.apply_signal(symbol, signal, price, all_prices_usd)
                     bot_results.append(result)
 
                     if result.get("executed"):
@@ -142,8 +145,7 @@ def main():
                         )
 
             # スナップショット保存
-            prices_for_snap = {s: d["price"] for s, d in current_prices.items()}
-            sim.save_snapshot(prices_for_snap)
+            sim.save_snapshot(all_prices_usd)
 
             results[bot_name] = {
                 "signals": signals,

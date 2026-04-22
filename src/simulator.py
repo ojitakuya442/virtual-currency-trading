@@ -16,6 +16,9 @@ from src.database import (
 
 logger = logging.getLogger(__name__)
 
+# サーキットブレーカー復帰用ヒステリシス: 損失率がこの値まで戻れば再稼働
+RECOVERY_LOSS_RATE = CIRCUIT_BREAKER_THRESHOLD * 0.5  # 例: 20% → 10%まで回復で復帰
+
 
 class Simulator:
     """
@@ -23,7 +26,7 @@ class Simulator:
 
     - 各botの仮想残高・ポジションを管理
     - target_position と current_position の差分でトレード実行
-    - バー終値で判断 → 次バー始値 (= 現バー終値近似) で約定
+    - 循環ブレーカー判定は全銘柄の時価評価で行う (偽陽性防止)
     """
 
     def __init__(self, bot_name: str):
@@ -40,28 +43,40 @@ class Simulator:
             self.balance = INITIAL_BALANCE
             self.is_active = True
 
-        # ポジション: {symbol: position_ratio}
-        # position_ratio = 0.0 (ノーポジ) ~ 1.0 (フルロング)
-        # 実際には「保有数量」で管理し、比率は total_asset で計算
+        # ポジション: {symbol: quantity (coin count)}
         positions = get_positions(self.bot_name)
         self.quantities = {}
         for symbol, data in positions.items():
             self.quantities[symbol] = data["position"]
 
-    def apply_signal(self, symbol: str, signal: dict, current_price: float) -> dict:
+    def apply_signal(self, symbol: str, signal: dict, current_price: float,
+                     all_prices: dict = None) -> dict:
         """
         target_position に基づいてポジション調整する。
 
         Args:
-            symbol: 銘柄ペア
+            symbol: 対象銘柄ペア
             signal: {"target_position": 0.0~1.0, "confidence": float, "reason": str}
-            current_price: 現在価格 (USDT建て → 内部でJPY変換)
+            current_price: 対象銘柄の現在価格 (USD建て)
+            all_prices: 全銘柄の現在価格 dict {symbol: price_usd}
+                       循環ブレーカー判定と total_asset 計算に使用。
+                       None の場合は current_price のみで計算 (後方互換)。
 
         Returns:
             dict: 取引結果
         """
+        # 全銘柄価格が渡されていなければ、少なくとも自銘柄は含める
+        prices_dict = dict(all_prices) if all_prices else {}
+        prices_dict[symbol] = current_price
+
+        # サーキットブレーカー復帰判定 (非アクティブ時)
         if not self.is_active:
-            return {"executed": False, "reason": "サーキットブレーカーにより停止中"}
+            if self._check_recovery(prices_dict):
+                logger.info(f"[{self.bot_name}] ✅ 損失率回復によりサーキットブレーカー解除")
+                self.is_active = True
+                update_bot_state(self.bot_name, self.balance, is_active=True)
+            else:
+                return {"executed": False, "reason": "サーキットブレーカーにより停止中"}
 
         # USD→JPY変換
         price_jpy = current_price * USD_JPY_RATE
@@ -70,8 +85,8 @@ class Simulator:
         confidence = signal.get("confidence", 0.0)
         reason = signal.get("reason", "")
 
-        # 現在のポジション比率を計算
-        total_asset = self._total_asset_jpy({symbol: current_price})
+        # 現在のポジション比率 (全銘柄を考慮した total_asset で算出)
+        total_asset = self._total_asset_jpy(prices_dict)
         current_qty = self.quantities.get(symbol, 0.0)
         current_value = current_qty * price_jpy
         current_pos = current_value / total_asset if total_asset > 0 else 0.0
@@ -101,8 +116,8 @@ class Simulator:
                 target_pos, current_pos, confidence, now, reason
             )
 
-        # サーキットブレーカーチェック
-        if not self._check_circuit_breaker_jpy({symbol: current_price}):
+        # サーキットブレーカー判定 (取引後、全銘柄評価で)
+        if not self._check_circuit_breaker_jpy(prices_dict):
             self.is_active = False
             update_bot_state(self.bot_name, self.balance, is_active=False)
 
@@ -196,15 +211,24 @@ class Simulator:
         }
 
     def _total_asset_jpy(self, current_prices_usd: dict) -> float:
-        """総資産(円)を計算する。current_pricesはUSD建て。"""
-        position_value = 0
+        """総資産(円)を計算する。current_prices_usdは全銘柄のUSD価格 dict。"""
+        position_value = 0.0
         for sym, qty in self.quantities.items():
-            if sym in current_prices_usd and qty > 0:
-                position_value += qty * current_prices_usd[sym] * USD_JPY_RATE
+            if qty <= 0:
+                continue
+            price_usd = current_prices_usd.get(sym)
+            if price_usd is None or price_usd <= 0:
+                # 価格が取れない銘柄は警告 (ポジション評価不能 = 循環ブレーカー誤作動の元)
+                logger.warning(
+                    f"[{self.bot_name}] {sym} の価格なし → total_asset評価から除外 "
+                    f"(qty={qty:.6f}). 循環ブレーカー判定が不正確になる可能性"
+                )
+                continue
+            position_value += qty * price_usd * USD_JPY_RATE
         return self.balance + position_value
 
     def _check_circuit_breaker_jpy(self, current_prices_usd: dict) -> bool:
-        """サーキットブレーカー判定。"""
+        """サーキットブレーカー判定。True=継続, False=発動 (停止)。"""
         total = self._total_asset_jpy(current_prices_usd)
         loss_rate = (INITIAL_BALANCE - total) / INITIAL_BALANCE
         if loss_rate >= CIRCUIT_BREAKER_THRESHOLD:
@@ -215,13 +239,22 @@ class Simulator:
             return False
         return True
 
+    def _check_recovery(self, current_prices_usd: dict) -> bool:
+        """停止中botが復帰可能か判定。総資産が回復閾値以上なら True。"""
+        total = self._total_asset_jpy(current_prices_usd)
+        loss_rate = (INITIAL_BALANCE - total) / INITIAL_BALANCE
+        return loss_rate < RECOVERY_LOSS_RATE
+
     def save_snapshot(self, current_prices: dict, trade_count: int = 0):
-        """残高スナップショット(円)を保存する。current_pricesはUSD建て。"""
-        position_value = sum(
-            qty * current_prices.get(sym, 0) * USD_JPY_RATE
-            for sym, qty in self.quantities.items()
-            if qty > 0
-        )
+        """残高スナップショット(円)を保存する。current_pricesはUSD建て全銘柄dict。"""
+        position_value = 0.0
+        for sym, qty in self.quantities.items():
+            if qty <= 0:
+                continue
+            price = current_prices.get(sym)
+            if price is None or price <= 0:
+                continue
+            position_value += qty * price * USD_JPY_RATE
         total_asset = self.balance + position_value
         total_pnl = total_asset - INITIAL_BALANCE
 

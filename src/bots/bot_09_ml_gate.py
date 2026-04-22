@@ -162,11 +162,35 @@ class BotMLGate(BaseBot):
         """再学習が必要か判定する。"""
         if symbol not in self.models:
             return True
+        # モデルの最終更新時刻でも判定 (プロセス再起動時に last_train_time が空になるため)
         if symbol not in self.last_train_time:
-            return True
+            path = self._model_path(symbol)
+            if path.exists():
+                mtime = datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc)
+                self.last_train_time[symbol] = mtime
+            else:
+                return True
 
         hours_since = (datetime.now(timezone.utc) - self.last_train_time[symbol]).total_seconds() / 3600
         return hours_since >= self.params["retrain_interval_hours"]
+
+    def _load_training_df(self, symbol: str, limit: int):
+        """DBから学習用データを取得してDataFrame化する。"""
+        try:
+            from src.database import get_recent_prices
+            from src.indicators import add_core_indicators
+            rows = get_recent_prices(symbol, limit=limit)
+            if not rows:
+                return None
+            df = pd.DataFrame(rows)
+            for col in ("open", "high", "low", "close", "volume"):
+                if col in df.columns:
+                    df[col] = df[col].astype(float)
+            df = add_core_indicators(df)
+            return df
+        except Exception as e:
+            logger.warning(f"[{self.name}][{symbol}] 学習データDBロード失敗: {e}")
+            return None
 
     def compute_signal(self, df: pd.DataFrame, symbol: str) -> dict:
         if not HAS_LGB:
@@ -175,7 +199,12 @@ class BotMLGate(BaseBot):
         # 再学習チェック
         if self._needs_retrain(symbol):
             train_window = self.params["train_window_bars"]
-            train_df = df.tail(train_window) if len(df) > train_window else df
+            # 学習用dfは十分な長さが必要なのでDBから取得 (引数のdfはrun_bots由来で500本程度)
+            train_df = self._load_training_df(symbol, train_window)
+            if train_df is None or len(train_df) < self.params["min_train_samples"]:
+                return self._hold_signal(
+                    f"学習データ不足 (DB={0 if train_df is None else len(train_df)}本)"
+                )
             self.train(train_df, symbol)
 
         if symbol not in self.models:

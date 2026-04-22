@@ -25,11 +25,19 @@ class BotDerivatives(BaseBot):
         funding_data = fetch_funding_rate(symbol=symbol)
         oi_data = fetch_open_interest(symbol=symbol)
 
-        if funding_data is None or oi_data is None:
-            return self._hold_signal("デリバティブデータ取得失敗")
+        # デリバ両方NGならベースラインのロング (0.3) にフォールバック
+        # (ただのキャッシュ保持だと他ボットとの比較検証ができないため)
+        if funding_data is None and oi_data is None:
+            return {
+                "target_position": 0.3,
+                "confidence": 0.2,
+                "reason": "デリバデータ取得失敗 → ベースラインロング",
+                "stop_loss": None,
+            }
 
-        funding_rate = funding_data["funding_rate"]
-        current_oi = oi_data["open_interest"]
+        # 片方だけ取れた場合: 欠損を0 (中立) 扱い
+        funding_rate = funding_data["funding_rate"] if funding_data else 0.0
+        current_oi = oi_data["open_interest"] if oi_data else 0.0
 
         # デリバデータをDB保存
         from datetime import datetime, timezone

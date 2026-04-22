@@ -159,9 +159,25 @@ def fetch_historical_data(exchange, symbol, days=30, timeframe="5m"):
 #  デリバティブ情報取得 (Bot #10用)
 # ────────────────────────────────────────────
 
-def fetch_funding_rate(exchange_futures=None, symbol="BTC/USDT"):
+def _to_perpetual_symbol(symbol: str) -> str:
+    """
+    現物 "BTC/USD" → Kraken Futures perp "BTC/USD:USD" のCCXT統一形式に変換。
+    既にペプ形式の場合はそのまま返す。
+    """
+    if ":" in symbol:
+        return symbol
+    if "/" in symbol:
+        _, quote = symbol.split("/")
+        return f"{symbol}:{quote}"
+    return symbol
+
+
+def fetch_funding_rate(exchange_futures=None, symbol="BTC/USD"):
     """
     Funding rate を取得する (Kraken Futures)。
+
+    Args:
+        symbol: 現物形式 "BTC/USD" or perp形式 "BTC/USD:USD"
 
     Returns:
         dict: {"funding_rate": float, "timestamp": str} or None
@@ -169,22 +185,26 @@ def fetch_funding_rate(exchange_futures=None, symbol="BTC/USDT"):
     if exchange_futures is None:
         exchange_futures = create_futures_exchange()
 
+    perp_symbol = _to_perpetual_symbol(symbol)
+
     try:
-        # CCXT v4: fetch_funding_rate
-        funding = exchange_futures.fetch_funding_rate(symbol)
+        funding = exchange_futures.fetch_funding_rate(perp_symbol)
         return {
-            "funding_rate": funding.get("fundingRate", 0),
+            "funding_rate": funding.get("fundingRate", 0) or 0,
             "timestamp": funding.get("timestamp", datetime.now(timezone.utc).isoformat()),
             "next_funding_time": funding.get("fundingTimestamp"),
         }
     except Exception as e:
-        logger.warning(f"[{symbol}] Funding rate取得エラー: {e}")
+        logger.warning(f"[{symbol}→{perp_symbol}] Funding rate取得エラー: {e}")
         return None
 
 
-def fetch_open_interest(exchange_futures=None, symbol="BTC/USDT"):
+def fetch_open_interest(exchange_futures=None, symbol="BTC/USD"):
     """
     Open Interest (未決済建玉) を取得する。
+
+    Args:
+        symbol: 現物形式 "BTC/USD" or perp形式 "BTC/USD:USD"
 
     Returns:
         dict: {"open_interest": float, "timestamp": str} or None
@@ -192,15 +212,18 @@ def fetch_open_interest(exchange_futures=None, symbol="BTC/USDT"):
     if exchange_futures is None:
         exchange_futures = create_futures_exchange()
 
+    perp_symbol = _to_perpetual_symbol(symbol)
+
     try:
-        # Kraken Futures の OI 取得
-        oi = exchange_futures.fetch_open_interest(symbol)
+        oi = exchange_futures.fetch_open_interest(perp_symbol)
+        # CCXT openInterestAmount または openInterestValue が返ることがある
+        amount = oi.get("openInterestAmount") or oi.get("openInterestValue") or 0
         return {
-            "open_interest": oi.get("openInterestAmount", 0),
+            "open_interest": amount,
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
     except Exception as e:
-        logger.warning(f"[{symbol}] Open Interest取得エラー: {e}")
+        logger.warning(f"[{symbol}→{perp_symbol}] Open Interest取得エラー: {e}")
         return None
 
 

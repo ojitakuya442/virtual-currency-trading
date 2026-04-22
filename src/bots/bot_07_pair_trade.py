@@ -26,10 +26,13 @@ class BotPairTrade(BaseBot):
     def get_signals(self, data_dict: dict) -> dict:
         """
         BTC/ETH の相対価格スプレッドに基づくシグナル。
+        config の symbols[0]=BTC, symbols[1]=ETH を想定。
         """
         p = self.params
-        btc_key = "BTC/USDT"
-        eth_key = "ETH/USDT"
+        if len(self.symbols) < 2:
+            return {s: self._hold_signal("ペアトレにはsymbols 2つ必要") for s in self.symbols}
+        btc_key = self.symbols[0]
+        eth_key = self.symbols[1]
 
         if btc_key not in data_dict or eth_key not in data_dict:
             return {
