@@ -1,9 +1,11 @@
-name: 自動売買Bot実行 (5分間隔)
+name: 自動売買Bot実行 (15分間隔)
 
 on:
   schedule:
-    # 5分ごとに実行 (UTC)
-    - cron: "*/5 * * * *"
+    # 15分おき、時間境界(:00/:15/:30/:45)を避けたオフセット。
+    # GitHub Free tier の schedule は境界時刻に集中して数時間遅延するため、
+    # :03/:18/:33/:48 の奇数オフセットで遅延を回避。
+    - cron: "3,18,33,48 * * * *"
   workflow_dispatch:  # 手動実行も可能
 
 permissions:
@@ -12,7 +14,7 @@ permissions:
 jobs:
   run-bots:
     runs-on: ubuntu-latest
-    timeout-minutes: 4  # 次の実行と被らないよう制限
+    timeout-minutes: 8  # ML学習 (#09) 込みで余裕を確保
 
     steps:
       - name: チェックアウト

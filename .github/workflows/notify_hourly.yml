@@ -2,8 +2,8 @@ name: Hourly Trade Notification
 
 on:
   schedule:
-    # 毎時0分に実行
-    - cron: '0 * * * *'
+    # 毎時11分に実行 (時間境界 :00 に集中すると Actions scheduler が遅延するため回避)
+    - cron: '11 * * * *'
   workflow_dispatch:
 
 permissions:

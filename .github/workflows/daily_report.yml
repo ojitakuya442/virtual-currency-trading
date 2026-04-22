@@ -2,8 +2,8 @@ name: 日次レポート送信
 
 on:
   schedule:
-    # 毎日21:00 JST (= 12:00 UTC) に実行
-    - cron: "0 12 * * *"
+    # 毎日21:17 JST (= 12:17 UTC) に実行 (時間境界 :00 を避けて遅延回避)
+    - cron: "17 12 * * *"
   workflow_dispatch:  # 手動実行も可能
 
 jobs:
