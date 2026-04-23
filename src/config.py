@@ -53,10 +53,9 @@ MAX_POSITION = 1.0                 # 最大ポジション (= 資産100%)
 MIN_POSITION = 0.0                 # 最小ポジション (ロングのみ)
 
 # ============================================================
-# 通知設定
+# 通知設定 (Discord Webhook)
 # ============================================================
-LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", "")
-LINE_USER_ID = os.getenv("LINE_USER_ID", "")
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", "")
 DAILY_REPORT_HOUR = 21
 
 # ============================================================
