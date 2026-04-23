@@ -28,7 +28,11 @@ def send_discord_message(content: str, embeds: list = None) -> bool:
     if content and len(content) > DISCORD_CONTENT_LIMIT:
         content = content[: DISCORD_CONTENT_LIMIT - 20] + "\n…(truncated)"
 
-    payload = {"content": content or ""}
+    # 将来的に他botも同じチャンネルへ投げる前提で、送信元を明示する
+    payload = {
+        "content": content or "",
+        "username": "💹 Crypto Trading Bot",
+    }
     if embeds:
         payload["embeds"] = embeds
 
