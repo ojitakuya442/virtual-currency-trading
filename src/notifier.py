@@ -158,25 +158,149 @@ def _gather_daily_stats() -> dict:
     }
 
 
-def _build_daily_embed(stats: dict) -> dict:
-    """日次レポートを Discord embed 形式で構築する。"""
-    color = COLOR_GREEN if stats["total_pnl"] > 0 else (
-        COLOR_RED if stats["total_pnl"] < 0 else COLOR_BLUE
-    )
-    pnl_icon = "📈" if stats["total_pnl"] > 0 else ("📉" if stats["total_pnl"] < 0 else "➖")
+def _compute_pnl_breakdown(stats: dict) -> dict:
+    """戦略PnL / 為替インパクト / 合計 の内訳を計算する。
 
-    description = (
-        f"**総資産** ¥{stats['total_fixed']:,.0f}  "
-        f"{pnl_icon} **{stats['total_pnl']:+,.0f}** ({stats['total_pnl_pct']:+.2f}%)\n"
-        f"実勢評価額 ¥{stats['total_real']:,.0f} / 為替 ¥{stats['usd_jpy_real']:.2f}/USD\n"
-        f"🤖 稼働 {stats['active_count']}/{stats['bot_count']} bots"
+    内訳の意味:
+      - strategy_pnl_jpy : 戦略の純粋な利益 (為替を固定基準で評価したPnL)
+      - strategy_pnl_usd : 同じ戦略PnLをUSDで表現したもの (為替の影響なし)
+      - forex_impact_jpy : 為替変動による円資産価値の上振れ/下振れ
+      - total_pnl_jpy    : 実勢レートでの円ベース合計PnL = strategy + forex
+    """
+    fixed_rate = stats["usd_jpy_fixed"]
+    real_rate = stats["usd_jpy_real"]
+
+    # 戦略PnL = 固定レート評価額 - 元本 (為替を固定して測った戦略の真価)
+    strategy_pnl_jpy = stats["total_fixed"] - stats["total_initial"]
+    strategy_pnl_pct = (strategy_pnl_jpy / stats["total_initial"]) * 100
+
+    # 戦略PnL をドル建てで表現 (FIXED_RATE で割るだけ — 為替に依存しない値)
+    strategy_pnl_usd = strategy_pnl_jpy / fixed_rate
+    initial_usd = stats["total_initial"] / fixed_rate
+
+    # 為替インパクト = 実勢評価 - 固定評価 (現在のクリプト保有を実勢で換算した差分)
+    forex_impact_jpy = stats["total_real"] - stats["total_fixed"]
+    forex_impact_pct = (forex_impact_jpy / stats["total_initial"]) * 100
+
+    # 合計PnL (実勢) = 戦略 + 為替
+    total_pnl_jpy = stats["total_real"] - stats["total_initial"]
+    total_pnl_pct = (total_pnl_jpy / stats["total_initial"]) * 100
+
+    # 為替の動き (固定基準からの%)
+    forex_move_pct = (real_rate - fixed_rate) / fixed_rate * 100
+
+    return {
+        "strategy_pnl_jpy": strategy_pnl_jpy,
+        "strategy_pnl_pct": strategy_pnl_pct,
+        "strategy_pnl_usd": strategy_pnl_usd,
+        "initial_usd": initial_usd,
+        "forex_impact_jpy": forex_impact_jpy,
+        "forex_impact_pct": forex_impact_pct,
+        "forex_move_pct": forex_move_pct,
+        "total_pnl_jpy": total_pnl_jpy,
+        "total_pnl_pct": total_pnl_pct,
+    }
+
+
+def _build_daily_summary_embed(stats: dict) -> dict:
+    """日次レポートのサマリー embed (見るべき数字を最上段に)。"""
+    p = _compute_pnl_breakdown(stats)
+
+    # 色は「戦略PnL」基準で決定 (為替で見栄えが化けないように)
+    color = COLOR_GREEN if p["strategy_pnl_jpy"] > 0 else (
+        COLOR_RED if p["strategy_pnl_jpy"] < 0 else COLOR_BLUE
     )
+
+    strat_icon = "📈" if p["strategy_pnl_jpy"] > 0 else ("📉" if p["strategy_pnl_jpy"] < 0 else "➖")
+    forex_icon = "📈" if p["forex_impact_jpy"] > 0 else ("📉" if p["forex_impact_jpy"] < 0 else "➖")
+
+    # ヘッドライン: 戦略の善し悪しを最初に
+    description = (
+        f"## {strat_icon} 戦略PnL: **¥{p['strategy_pnl_jpy']:+,.0f}** "
+        f"({p['strategy_pnl_pct']:+.2f}%)\n"
+        f"※ 為替を ¥{stats['usd_jpy_fixed']:.0f}/USD 固定で評価した、純粋なbotの腕前\n"
+        f"USD建てに換算すると **${p['strategy_pnl_usd']:+.2f}** "
+        f"(元本 ${p['initial_usd']:,.2f})"
+    )
+
+    # ベスト/ワースト判定 (取引してないbotは除外)
+    active_bots = [b for b in stats["bots"] if b["trade_count"] > 0 or b["pnl"] != 0]
+    if active_bots:
+        sorted_bots = sorted(active_bots, key=lambda b: b["pnl_pct"], reverse=True)
+        best = sorted_bots[0]
+        worst = sorted_bots[-1]
+        best_str = f"#{best['num']} {best['short_name']}\n{best['pnl_pct']:+.2f}%"
+        worst_str = f"#{worst['num']} {worst['short_name']}\n{worst['pnl_pct']:+.2f}%"
+    else:
+        best_str = worst_str = "(取引なし)"
+
+    total_trades = sum(b["trade_count"] for b in stats["bots"])
+
+    fields = [
+        {
+            "name": f"{forex_icon} 為替インパクト",
+            "value": (
+                f"¥{p['forex_impact_jpy']:+,.0f} ({p['forex_impact_pct']:+.2f}%)\n"
+                f"USD/JPY ¥{stats['usd_jpy_real']:.2f}\n"
+                f"(基準¥{stats['usd_jpy_fixed']:.0f}, {p['forex_move_pct']:+.1f}%)"
+            ),
+            "inline": True,
+        },
+        {
+            "name": "💴 円ベース合計",
+            "value": (
+                f"¥{stats['total_real']:,.0f}\n"
+                f"PnL ¥{p['total_pnl_jpy']:+,.0f}\n"
+                f"({p['total_pnl_pct']:+.2f}%)"
+            ),
+            "inline": True,
+        },
+        {
+            "name": "📊 アクティビティ",
+            "value": (
+                f"取引 {total_trades}回\n"
+                f"稼働 {stats['active_count']}/{stats['bot_count']} bots"
+            ),
+            "inline": True,
+        },
+        {
+            "name": "🥇 ベスト",
+            "value": best_str,
+            "inline": True,
+        },
+        {
+            "name": "📉 ワースト",
+            "value": worst_str,
+            "inline": True,
+        },
+        {
+            "name": "📖 見方",
+            "value": (
+                "戦略PnL = bot本体の成績\n"
+                "為替は外部要因 (おまけ)"
+            ),
+            "inline": True,
+        },
+    ]
+
+    return {
+        "title": "📊 仮想通貨Bot 日次レポート",
+        "description": description,
+        "color": color,
+        "fields": fields,
+        "footer": {"text": f"📅 {stats['date_str']}  ・  下のカードに各bot詳細"},
+        "timestamp": stats["now"].isoformat(),
+    }
+
+
+def _build_daily_detail_embed(stats: dict) -> dict:
+    """各bot詳細 embed (3カラムグリッド)。"""
+    color = COLOR_BLUE  # 詳細カードは中立色
 
     fields = []
     for b in stats["bots"]:
         status = "🟢" if b["is_active"] else "🔴"
         bot_pnl_icon = "📈" if b["pnl"] > 0 else ("📉" if b["pnl"] < 0 else "➖")
-        # 値はコンパクトに 2行
         value = (
             f"¥{b['total_fixed']:,.0f}\n"
             f"{bot_pnl_icon} {b['pnl_pct']:+.1f}%  T:{b['trade_count']}"
@@ -187,27 +311,26 @@ def _build_daily_embed(stats: dict) -> dict:
             "inline": True,
         })
 
-    embed = {
-        "title": "📊 仮想通貨Bot 日次レポート",
-        "description": description,
+    return {
+        "title": "🤖 各bot詳細 (固定レート評価)",
+        "description": "T = 当日の取引数 / 値は為替固定¥150/USDで評価",
         "color": color,
         "fields": fields,
-        "footer": {"text": f"📅 {stats['date_str']} | Fixed Rate ¥{stats['usd_jpy_fixed']:.0f}/USD"},
-        "timestamp": stats["now"].isoformat(),
     }
-    return embed
 
 
 def send_daily_report():
-    """日次レポート (embed) を生成して送信する。"""
+    """日次レポート (サマリー + 各bot詳細) を Discord に送信する。"""
     stats = _gather_daily_stats()
-    embed = _build_daily_embed(stats)
+    p = _compute_pnl_breakdown(stats)
+    summary = _build_daily_summary_embed(stats)
+    detail = _build_daily_detail_embed(stats)
     logger.info(
-        f"日次レポート: 総資産¥{stats['total_fixed']:,.0f} "
-        f"PnL{stats['total_pnl']:+,.0f} ({stats['total_pnl_pct']:+.2f}%) "
+        f"日次レポート: 戦略PnL¥{p['strategy_pnl_jpy']:+,.0f} ({p['strategy_pnl_pct']:+.2f}%) "
+        f"為替¥{p['forex_impact_jpy']:+,.0f}  合計¥{stats['total_real']:,.0f} "
         f"稼働{stats['active_count']}/{stats['bot_count']}"
     )
-    return send_discord_message(embeds=[embed])
+    return send_discord_message(embeds=[summary, detail])
 
 
 # ────────────────────────────────────────────────────────────
