@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "updated_at": "2026-04-28T12:00:28.300178+00:00",
-    "usd_jpy_real": 159.834,
+    "updated_at": "2026-04-28T14:39:22.284013+00:00",
+    "usd_jpy_real": 160.116,
     "usd_jpy_fixed": 150.0
   },
   "summary": {
-    "total_asset_fixed": 510446.9852722272,
-    "total_asset_real": 515429.54089334514,
-    "total_pnl": 10446.985272227204,
-    "total_pnl_pct": 2.089397054445441,
+    "total_asset_fixed": 509889.7785933635,
+    "total_asset_real": 517626.69513972005,
+    "total_pnl": 9889.778593363473,
+    "total_pnl_pct": 1.9779557186726946,
     "active_bots": 10,
     "total_bots": 10
   },
@@ -17,22 +17,22 @@
       "name": "01_donchian",
       "display_name": "#01",
       "status": "active",
-      "total_jpy_fixed": 52293.80083490115,
-      "pnl_jpy": 2293.8008349011507,
-      "pnl_pct": 4.587601669802301,
+      "total_jpy_fixed": 52230.07664156805,
+      "pnl_jpy": 2230.076641568048,
+      "pnl_pct": 4.460153283136097,
       "trade_count_today": 2,
       "positions": [
         {
           "symbol": "ETH/USD",
           "quantity": 0.015280608438211683,
-          "price_usd": 2275.01,
-          "value_jpy_fixed": 5214.530550452394
+          "price_usd": 2262.92,
+          "value_jpy_fixed": 5186.819167049697
         },
         {
           "symbol": "BTC/USD",
           "quantity": 0.0004553971918362183,
-          "price_usd": 76215.7,
-          "value_jpy_fixed": 5206.26236307475
+          "price_usd": 75688.5,
+          "value_jpy_fixed": 5170.249553144341
         }
       ]
     },
@@ -40,26 +40,39 @@
       "name": "02_ema_adx",
       "display_name": "#02",
       "status": "active",
-      "total_jpy_fixed": 52848.92479852242,
-      "pnl_jpy": 2848.924798522421,
-      "pnl_pct": 5.697849597044842,
-      "trade_count_today": 9,
-      "positions": []
+      "total_jpy_fixed": 52839.89024270894,
+      "pnl_jpy": 2839.8902427089415,
+      "pnl_pct": 5.679780485417883,
+      "trade_count_today": 10,
+      "positions": [
+        {
+          "symbol": "ETH/USD",
+          "quantity": 0.015542920722013331,
+          "price_usd": 2262.92,
+          "value_jpy_fixed": 5275.857924038761
+        }
+      ]
     },
     {
       "name": "03_bb_zscore",
       "display_name": "#03",
       "status": "active",
-      "total_jpy_fixed": 51899.607740282634,
-      "pnl_jpy": 1899.607740282634,
-      "pnl_pct": 3.7992154805652683,
-      "trade_count_today": 3,
+      "total_jpy_fixed": 51732.21106978607,
+      "pnl_jpy": 1732.2110697860699,
+      "pnl_pct": 3.4644221395721395,
+      "trade_count_today": 5,
       "positions": [
         {
+          "symbol": "BTC/USD",
+          "quantity": 0.0009077965696739629,
+          "price_usd": 75688.5,
+          "value_jpy_fixed": 10306.46409956516
+        },
+        {
           "symbol": "ETH/USD",
-          "quantity": 0.030377843972250608,
-          "price_usd": 2275.01,
-          "value_jpy_fixed": 10366.48482229648
+          "quantity": 0.11541583011809275,
+          "price_usd": 2262.92,
+          "value_jpy_fixed": 39176.51854362517
         }
       ]
     },
@@ -67,22 +80,22 @@
       "name": "04_vwap",
       "display_name": "#04",
       "status": "active",
-      "total_jpy_fixed": 52511.95375634781,
-      "pnl_jpy": 2511.953756347808,
-      "pnl_pct": 5.023907512695616,
+      "total_jpy_fixed": 52384.834636001935,
+      "pnl_jpy": 2384.834636001935,
+      "pnl_pct": 4.7696692720038705,
       "trade_count_today": 0,
       "positions": [
         {
           "symbol": "ETH/USD",
           "quantity": 0.03020716405153067,
-          "price_usd": 2275.01,
-          "value_jpy_fixed": 10308.24004333092
+          "price_usd": 2262.92,
+          "value_jpy_fixed": 10253.459351323469
         },
         {
           "symbol": "BTC/USD",
           "quantity": 0.0009147499789886886,
-          "price_usd": 76215.7,
-          "value_jpy_fixed": 10457.746496041227
+          "price_usd": 75688.5,
+          "value_jpy_fixed": 10385.408067702803
         }
       ]
     },
@@ -90,18 +103,11 @@
       "name": "05_squeeze",
       "display_name": "#05",
       "status": "active",
-      "total_jpy_fixed": 53240.845350287644,
-      "pnl_jpy": 3240.8453502876437,
-      "pnl_pct": 6.481690700575288,
-      "trade_count_today": 9,
-      "positions": [
-        {
-          "symbol": "SOL/USD",
-          "quantity": 0.4238383873072294,
-          "price_usd": 83.37,
-          "value_jpy_fixed": 5300.310952470558
-        }
-      ]
+      "total_jpy_fixed": 53229.0860601914,
+      "pnl_jpy": 3229.086060191403,
+      "pnl_pct": 6.458172120382806,
+      "trade_count_today": 10,
+      "positions": []
     },
     {
       "name": "06_vol_momentum",
@@ -137,22 +143,22 @@
       "name": "09_ml_gate",
       "display_name": "#09",
       "status": "active",
-      "total_jpy_fixed": 49489.46697247733,
-      "pnl_jpy": -510.53302752267336,
-      "pnl_pct": -1.0210660550453468,
+      "total_jpy_fixed": 49430.04874984252,
+      "pnl_jpy": -569.9512501574791,
+      "pnl_pct": -1.139902500314958,
       "trade_count_today": 2,
       "positions": [
         {
           "symbol": "BTC/USD",
           "quantity": 0.00042086040221690085,
-          "price_usd": 76215.7,
-          "value_jpy_fixed": 4811.4255235863975
+          "price_usd": 75688.5,
+          "value_jpy_fixed": 4778.143882979085
         },
         {
           "symbol": "ETH/USD",
           "quantity": 0.014412231611519015,
-          "price_usd": 2275.01,
-          "value_jpy_fixed": 4918.195655778282
+          "price_usd": 2262.92,
+          "value_jpy_fixed": 4892.059073750792
         }
       ]
     },
@@ -160,27 +166,63 @@
       "name": "10_deriv",
       "display_name": "#10",
       "status": "active",
-      "total_jpy_fixed": 49046.95457530019,
-      "pnl_jpy": -953.0454246998124,
-      "pnl_pct": -1.9060908493996247,
+      "total_jpy_fixed": 48928.19994915655,
+      "pnl_jpy": -1071.8000508434488,
+      "pnl_pct": -2.1436001016868977,
       "trade_count_today": 0,
       "positions": [
         {
           "symbol": "BTC/USD",
           "quantity": 0.0008495823539220568,
-          "price_usd": 76215.7,
-          "value_jpy_fixed": 9712.727071772595
+          "price_usd": 75688.5,
+          "value_jpy_fixed": 9645.542099224438
         },
         {
           "symbol": "ETH/USD",
           "quantity": 0.028436533551408308,
-          "price_usd": 2275.01,
-          "value_jpy_fixed": 9704.009729218413
+          "price_usd": 2262.92,
+          "value_jpy_fixed": 9652.440075622933
         }
       ]
     }
   ],
   "recent_trades": [
+    {
+      "timestamp": "2026-04-28T13:11:21.865738+00:00",
+      "bot": "05",
+      "action": "SELL",
+      "symbol": "SOL/USD",
+      "price": 12496.5,
+      "quantity": 0.4238383873072294,
+      "icon": "🔴"
+    },
+    {
+      "timestamp": "2026-04-28T13:11:21.848228+00:00",
+      "bot": "03",
+      "action": "BUY",
+      "symbol": "ETH/USD",
+      "price": 339510.0,
+      "quantity": 0.08503798614584214,
+      "icon": "🟢"
+    },
+    {
+      "timestamp": "2026-04-28T13:11:21.844990+00:00",
+      "bot": "03",
+      "action": "BUY",
+      "symbol": "BTC/USD",
+      "price": 11405430.0,
+      "quantity": 0.0009077965696739629,
+      "icon": "🟢"
+    },
+    {
+      "timestamp": "2026-04-28T13:11:21.829421+00:00",
+      "bot": "02",
+      "action": "BUY",
+      "symbol": "ETH/USD",
+      "price": 339510.0,
+      "quantity": 0.015542920722013331,
+      "icon": "🟢"
+    },
     {
       "timestamp": "2026-04-28T11:27:10.460710+00:00",
       "bot": "08",
@@ -593,42 +635,6 @@
       "symbol": "ETH/USD",
       "price": 344397.0,
       "quantity": 0.09875903568121236,
-      "icon": "🟢"
-    },
-    {
-      "timestamp": "2026-04-27T23:37:31.529242+00:00",
-      "bot": "05",
-      "action": "SELL",
-      "symbol": "ETH/USD",
-      "price": 344397.0,
-      "quantity": 0.01542664798834537,
-      "icon": "🔴"
-    },
-    {
-      "timestamp": "2026-04-27T23:37:31.503922+00:00",
-      "bot": "02",
-      "action": "BUY",
-      "symbol": "BTC/USD",
-      "price": 11583405.0,
-      "quantity": 0.0018427953772930405,
-      "icon": "🟢"
-    },
-    {
-      "timestamp": "2026-04-27T22:34:07.812767+00:00",
-      "bot": "06",
-      "action": "BUY",
-      "symbol": "BTC/USD",
-      "price": 11549475.0,
-      "quantity": 0.0008693338321975026,
-      "icon": "🟢"
-    },
-    {
-      "timestamp": "2026-04-27T22:34:07.802748+00:00",
-      "bot": "05",
-      "action": "BUY",
-      "symbol": "ETH/USD",
-      "price": 343783.5,
-      "quantity": 0.046581300856210595,
       "icon": "🟢"
     }
   ]
