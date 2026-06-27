@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0f172a;
+  /* slate-900 for modern dark mode base */
+  --foreground: #f8fafc;
+  /* slate-50 */
+
+  /* Golden Ratio \phi \approx 1.618 */
+  --phi-base: 1rem;
+  --phi-1: calc(var(--phi-base) * 1.618);
+  --phi-2: calc(var(--phi-1) * 1.618);
+  --phi-3: calc(var(--phi-2) * 1.618);
+  --phi-4: calc(var(--phi-3) * 1.618);
+  --phi-5: calc(var(--phi-4) * 1.618);
+
+  --phi-neg-1: calc(var(--phi-base) / 1.618);
+  --phi-neg-2: calc(var(--phi-neg-1) / 1.618);
+
+  --card-bg: #1e293b;
+  /* slate-800 */
+  --card-border: #334155;
+  /* slate-700 */
+
+  --brand-primary: #3b82f6;
+  /* blue-500 */
+  --brand-success: #10b981;
+  /* emerald-500 */
+  --brand-danger: #ef4444;
+  /* red-500 */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Golden Ratio Spacing */
+  --spacing-phi-base: var(--phi-base);
+  --spacing-phi-1: var(--phi-1);
+  --spacing-phi-2: var(--phi-2);
+  --spacing-phi-3: var(--phi-3);
+  --spacing-phi-4: var(--phi-4);
+  --spacing-phi-half: var(--phi-neg-1);
+  --spacing-phi-quarter: var(--phi-neg-2);
+
+  /* Golden Ratio Font Sizes */
+  --font-size-phi-base: var(--phi-base);
+  --font-size-phi-1: var(--phi-1);
+  --font-size-phi-2: var(--phi-2);
+  --font-size-phi-3: var(--phi-3);
+  --font-size-phi-small: var(--phi-neg-1);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer utilities {
+  .glass-card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--phi-base);
+  }
+}
