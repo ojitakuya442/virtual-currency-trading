@@ -66,12 +66,13 @@ class BotBBZscore(BaseBot):
                 "stop_loss": None,
             }
 
-        # z-scoreが中立近辺 → 平均回帰方向で薄いポジション
-        if cur_z < 0 and cur_rsi < 50:
+        # 下方に明確に振れた場合のみ → 平均回帰方向で薄いポジション
+        # (ゼロ近傍のノイズ振動で0.2⇄0.0を往復しコスト負けするため、閾値でゲート)
+        if cur_z <= p["neutral_entry_z"] and cur_rsi <= p["neutral_entry_rsi"]:
             return {
                 "target_position": 0.2,
                 "confidence": 0.3,
-                "reason": f"z={cur_z:.2f} やや下方 — 控えめロング",
+                "reason": f"z={cur_z:.2f} 下方乖離 (≦{p['neutral_entry_z']}) — 控えめロング",
                 "stop_loss": None,
             }
 

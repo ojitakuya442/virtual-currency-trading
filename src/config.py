@@ -102,6 +102,13 @@ BOT_CONFIGS = {
             "max_hold_bars": 48,        # 最大保有本数（4時間）
             "adx_period": 14,
             "adx_pause_threshold": 30,  # ADX高→トレンド中は停止
+            # 中立分岐(控えめロング0.2)のゲート。旧実装は z<0 & rsi<50 のハードコードで、
+            # z-scoreのゼロ近傍ノイズにより0.2⇄0.0の往復が7日82取引・実現-541円の
+            # コスト負けを生んでいた（2026-07-05調査。損失の97.6%がこの往復）。
+            # 値は直近8.7日の実データ検証で選定: -1.0/40では7日換算約50取引と基準(<40)超過、
+            # -1.5/35で約35取引の見込み（詳細: docs/decisions/2026-07-05-tune-03_bb_zscore.md）
+            "neutral_entry_z": -1.5,    # zがこの値以下のときだけ控えめロング
+            "neutral_entry_rsi": 35,    # RSI確認（この値以下）
         },
     },
     "04_vwap": {
@@ -176,9 +183,11 @@ BOT_CONFIGS = {
         "description": "デリバ情報併用 (Funding/OI環境変数)",
         "symbols": ["BTC/USD", "ETH/USD"],
         "params": {
-            "funding_extreme_pct": 0.01,   # Funding rate過熱閾値 (1%)
+            # Kraken Futures の実FRは1e-5オーダー (実測74日: BTC ±3.3e-5, ETH -6.1e-5〜+3.3e-5)。
+            # 旧値0.01はBinanceスケールの名残で実値の約160倍 → 一度も発火しなかった
+            "funding_extreme_pct": 3e-5,   # Funding rate過熱閾値
             "oi_change_threshold": 0.10,   # OI変動率閾値 (10%)
-            "cooldown_bars": 6,            # 過熱後のクールダウン本数
+            "cooldown_bars": 6,            # 過熱後のクールダウン本数（現状未参照・将来用）
         },
     },
 }
