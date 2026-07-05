@@ -1,6 +1,8 @@
 """
 Bot #10: デリバティブ情報併用 (Funding Rate / Open Interest)
-Binance Futures の funding rate と OI を環境情報として利用。
+Kraken Futures の funding rate と OI を環境情報として利用。
+※ funding rate のスケールは取引所により大きく異なる（Kraken の実測値は
+   1e-5 オーダー）。閾値 funding_extreme_pct は実データ分布に合わせること。
 - Funding高→ロング過熱 → 利確/クローズ
 - Funding低+OI急増 → 新規ロングチャンス
 - OI急減 → ポジション解消圧力
@@ -39,13 +41,15 @@ class BotDerivatives(BaseBot):
         funding_rate = funding_data["funding_rate"] if funding_data else 0.0
         current_oi = oi_data["open_interest"] if oi_data else 0.0
 
+        # 前回のOI取得 (変動率計算用)
+        # 必ず save_derivative_data の前に読むこと。保存後に読むと直前に保存した
+        # 自分自身のレコードと比較してしまい oi_change が恒等的に 0 になる
+        prev_deriv = get_latest_derivative(symbol)
+
         # デリバデータをDB保存
         from datetime import datetime, timezone
         now = datetime.now(timezone.utc).isoformat()
         save_derivative_data(now, symbol, funding_rate, current_oi)
-
-        # 前回のOI取得 (変動率計算用)
-        prev_deriv = get_latest_derivative(symbol)
         if prev_deriv and prev_deriv["open_interest"] and prev_deriv["open_interest"] > 0:
             oi_change = (current_oi - prev_deriv["open_interest"]) / prev_deriv["open_interest"]
         else:

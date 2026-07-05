@@ -329,6 +329,28 @@ def get_daily_summary(bot_name, date_str):
         conn.close()
 
 
+def get_last_trade_time(bot_name, symbol):
+    """指定bot×銘柄の直近の約定時刻(BUY/SELL)を tz-aware datetime で返す。無ければ None。"""
+    conn = get_connection()
+    try:
+        row = conn.execute(
+            "SELECT MAX(timestamp) AS ts FROM trades "
+            "WHERE bot_name = ? AND symbol = ? AND action IN ('BUY', 'SELL')",
+            (bot_name, symbol),
+        ).fetchone()
+    finally:
+        conn.close()
+    if row and row["ts"]:
+        try:
+            ts = datetime.fromisoformat(row["ts"])
+            if ts.tzinfo is None:
+                ts = ts.replace(tzinfo=timezone.utc)
+            return ts
+        except ValueError:
+            return None
+    return None
+
+
 def get_positions(bot_name):
     """指定ボットの現在ポジション（保有銘柄）を取得する。"""
     conn = get_connection()

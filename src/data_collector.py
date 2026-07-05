@@ -216,8 +216,24 @@ def fetch_open_interest(exchange_futures=None, symbol="BTC/USD"):
 
     try:
         oi = exchange_futures.fetch_open_interest(perp_symbol)
-        # CCXT openInterestAmount または openInterestValue が返ることがある
-        amount = oi.get("openInterestAmount") or oi.get("openInterestValue") or 0
+        # CCXT openInterestAmount / openInterestValue / info.openInterest の順に探す
+        raw = oi.get("openInterestAmount")
+        if raw is None:
+            raw = oi.get("openInterestValue")
+        if raw is None and isinstance(oi.get("info"), dict):
+            raw = oi["info"].get("openInterest")
+        try:
+            amount = float(raw) if raw is not None else 0.0
+        except (TypeError, ValueError):
+            amount = 0.0
+        if amount <= 0:
+            # 旧実装は `or 0` で欠損を黙って0として保存しており、OIが全期間0になる
+            # 原因だった。欠損は取得失敗として扱い、警告を残して None を返す
+            logger.warning(
+                f"[{symbol}→{perp_symbol}] Open Interest応答に有効な建玉数量なし "
+                f"(amount={oi.get('openInterestAmount')}, value={oi.get('openInterestValue')})"
+            )
+            return None
         return {
             "open_interest": amount,
             "timestamp": datetime.now(timezone.utc).isoformat(),

@@ -37,3 +37,7 @@ models/*.onnx
 
 # Logs
 *.log
+
+# SQLite WAL temp files (created by read sessions)
+data/*.db-shm
+data/*.db-wal
