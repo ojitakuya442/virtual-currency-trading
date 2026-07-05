@@ -42,8 +42,11 @@ class BotMLGate(BaseBot):
         self._load_models()
 
     def _model_path(self, symbol: str) -> Path:
+        # ファイル名にシグナル足を含める: 足の変更時に旧足で学習したモデルを
+        # 誤って使い続けないため（該当パスが無ければ初回実行で即再学習される）
+        from src.config import SIGNAL_TIMEFRAME
         safe_name = symbol.replace("/", "_")
-        return self.model_dir / f"ml_gate_{safe_name}.pkl"
+        return self.model_dir / f"ml_gate_{safe_name}_{SIGNAL_TIMEFRAME}.pkl"
 
     def _load_models(self):
         """保存済みモデルをロードする。"""
@@ -175,8 +178,13 @@ class BotMLGate(BaseBot):
         return hours_since >= self.params["retrain_interval_hours"]
 
     def _load_training_df(self, symbol: str, limit: int):
-        """DBから学習用データを取得してDataFrame化する。"""
+        """DBから学習用データを取得し、シグナル足にリサンプリングしてDataFrame化する。
+
+        pricesテーブルは5分足粒度のため、推論に使う足(SIGNAL_TIMEFRAME)と
+        揃えないと学習と推論で特徴量の意味がズレる。
+        """
         try:
+            from src.config import SIGNAL_TIMEFRAME
             from src.database import get_recent_prices
             from src.indicators import add_core_indicators
             rows = get_recent_prices(symbol, limit=limit)
@@ -186,6 +194,17 @@ class BotMLGate(BaseBot):
             for col in ("open", "high", "low", "close", "volume"):
                 if col in df.columns:
                     df[col] = df[col].astype(float)
+            df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True, format="mixed")
+            df = (
+                df.set_index("timestamp").sort_index()
+                .resample(SIGNAL_TIMEFRAME)
+                .agg({"open": "first", "high": "max", "low": "min",
+                      "close": "last", "volume": "sum"})
+                .dropna()
+                .reset_index()
+            )
+            if df.empty:
+                return None
             df = add_core_indicators(df)
             return df
         except Exception as e:

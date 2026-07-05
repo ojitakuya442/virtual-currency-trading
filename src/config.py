@@ -32,9 +32,14 @@ TOTAL_COST_RATE = TRADE_FEE_RATE + SLIPPAGE_RATE  # 合計 0.15%
 # ============================================================
 # データ取得設定
 # ============================================================
-INTERVAL = "5m"
+INTERVAL = "5m"          # 価格記録の足 (prices テーブルの粒度。変更しない)
 INTERVAL_MINUTES = 5
 HISTORICAL_DAYS = 30
+
+# シグナル計算の足 (2026-07-05 構成見直し①: 取引頻度の削減)
+# 5分足シグナルでは1取引の期待値幅(実測グロス約1.9円/取引)が往復コスト(約20円/取引)の
+# 1/10しかなくコスト負けが構造化していたため、判定を1時間足に変更して保有時間を伸ばす
+SIGNAL_TIMEFRAME = "1h"
 
 # ============================================================
 # エラーハンドリング
@@ -48,9 +53,22 @@ ANOMALY_THRESHOLD = 0.5
 # ============================================================
 CIRCUIT_BREAKER_THRESHOLD = 0.20   # 初期資産の20%減少で自動停止
 DAILY_LOSS_LIMIT = 0.05            # 日次損失上限 (5%)
-POSITION_CHANGE_THRESHOLD = 0.05   # ポジション変更最小閾値
+# 2026-07-05 構成見直し①: 0.05→0.20。小刻みなリバランス約定(コストの主因)を抑止
+POSITION_CHANGE_THRESHOLD = 0.20   # ポジション変更最小閾値
 MAX_POSITION = 1.0                 # 最大ポジション (= 資産100%)
 MIN_POSITION = 0.0                 # 最小ポジション (ロングのみ)
+
+# 最低保有期間 (2026-07-05 構成見直し①): 直近約定からこの時間が経過するまで
+# 同一bot×銘柄のポジション変更をスキップする（往復ビンタのコスト抑制）
+MIN_HOLD_MINUTES = 240
+
+# 現金退避レジームフィルタ (2026-07-05 構成見直し②・提案書 案A):
+# 1時間足の終値が SMA(REGIME_SMA_PERIOD) を下回る銘柄は下落レジームとみなし、
+# 全botの target_position を REGIME_BEAR_MAX_POSITION に制限する（bot実装は不変）。
+# False にすれば即ロールバック可能
+REGIME_FILTER_ENABLED = True
+REGIME_SMA_PERIOD = 200            # 1時間足200本 ≈ 8.3日
+REGIME_BEAR_MAX_POSITION = 0.0     # 下落レジーム中は現金退避
 
 # ============================================================
 # 通知設定 (Discord Webhook)
@@ -172,9 +190,9 @@ BOT_CONFIGS = {
         "symbols": ["BTC/USD", "ETH/USD"],
         "params": {
             "retrain_interval_hours": 24,   # 再学習間隔
-            "train_window_bars": 4032,      # 学習窓 (14日×288本/日)
-            "min_train_samples": 2000,
-            "prediction_horizon": 6,        # 予測先行き本数 (30分)
+            "train_window_bars": 12000,     # 学習用にDBから取得する5分足行数(リサンプリング前)
+            "min_train_samples": 600,       # 1時間足リサンプリング後の最低学習サンプル数
+            "prediction_horizon": 6,        # 予測先行き本数 (1時間足×6 = 6時間)
             "model_dir": "models",
         },
     },

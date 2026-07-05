@@ -19,7 +19,10 @@ import pandas as pd
 # プロジェクトルートをパスに追加
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent.parent))
 
-from src.config import SYMBOLS, BOT_CONFIGS, BOT_NAMES
+from src.config import (
+    SYMBOLS, BOT_CONFIGS, BOT_NAMES, SIGNAL_TIMEFRAME,
+    REGIME_FILTER_ENABLED, REGIME_SMA_PERIOD, REGIME_BEAR_MAX_POSITION,
+)
 from src.database import init_database, save_price, get_recent_prices
 from src.data_collector import (
     create_exchange, fetch_ohlcv, fetch_current_prices,
@@ -83,18 +86,17 @@ def main():
         logger.info(f"  {symbol}: ${data['price']:,.2f}")
 
     # ── Step 2: OHLCV取得 + 指標計算 ──
-    logger.info("📈 OHLCVデータを取得中...")
-    data_dict = {}  # {symbol: DataFrame}
+    # 価格記録は従来どおり5分足の最新バーを保存し（pricesテーブルの粒度を維持）、
+    # シグナル計算は SIGNAL_TIMEFRAME (1時間足) で行う（2026-07-05 構成見直し①）
+    logger.info(f"📈 OHLCVデータを取得中... (シグナル足: {SIGNAL_TIMEFRAME})")
+    data_dict = {}  # {symbol: DataFrame (SIGNAL_TIMEFRAME)}
 
     for symbol in SYMBOLS:
         try:
-            df = fetch_ohlcv(exchange, symbol, timeframe="5m", limit=500)
-            if df is not None and not df.empty:
-                df = add_core_indicators(df)
-                data_dict[symbol] = df
-
-                # 最新価格をDBに保存
-                last = df.iloc[-1]
+            # 価格記録用: 5分足の最新バー
+            df5 = fetch_ohlcv(exchange, symbol, timeframe="5m", limit=10)
+            if df5 is not None and not df5.empty:
+                last = df5.iloc[-1]
                 save_price(
                     timestamp=last["timestamp"].isoformat() if hasattr(last["timestamp"], "isoformat") else str(last["timestamp"]),
                     symbol=symbol,
@@ -104,6 +106,12 @@ def main():
                     close=last["close"],
                     volume=last["volume"],
                 )
+
+            # シグナル計算用: SIGNAL_TIMEFRAME 足
+            df = fetch_ohlcv(exchange, symbol, timeframe=SIGNAL_TIMEFRAME, limit=500)
+            if df is not None and not df.empty:
+                df = add_core_indicators(df)
+                data_dict[symbol] = df
             else:
                 logger.warning(f"[{symbol}] OHLCVデータなし")
         except Exception as e:
@@ -112,6 +120,20 @@ def main():
     if not data_dict:
         logger.error("OHLCVデータが一切取得できませんでした。終了します。")
         return
+
+    # ── Step 2.5: 現金退避レジーム判定 (2026-07-05 構成見直し②・提案書 案A) ──
+    # 終値が長期SMAを下回る銘柄は下落レジームとみなし、全botのロングを制限する
+    bear_regime = {}
+    if REGIME_FILTER_ENABLED:
+        for symbol, df in data_dict.items():
+            close = df["close"].astype(float)
+            if len(close) >= REGIME_SMA_PERIOD:
+                sma_val = close.rolling(REGIME_SMA_PERIOD).mean().iloc[-1]
+                bear_regime[symbol] = bool(close.iloc[-1] < sma_val)
+            else:
+                bear_regime[symbol] = False  # 判定不能時はフィルタを掛けない
+        bears = [s for s, b in bear_regime.items() if b]
+        logger.info(f"🌧 下落レジーム銘柄: {bears if bears else 'なし'}")
 
     # ── Step 3 & 4: 各Botシグナル計算 → ポジション調整 ──
     logger.info(f"🤖 {len(BOT_NAMES)}bot のシグナルを計算中...")
@@ -134,6 +156,12 @@ def main():
             bot_results = []
             for symbol, signal in signals.items():
                 if symbol in current_prices:
+                    # 下落レジーム中はロングを制限（現金退避）。bot実装には触れない
+                    if REGIME_FILTER_ENABLED and bear_regime.get(symbol) \
+                            and signal.get("target_position", 0.0) > REGIME_BEAR_MAX_POSITION:
+                        signal = dict(signal)
+                        signal["target_position"] = REGIME_BEAR_MAX_POSITION
+                        signal["reason"] = f"[下落レジーム退避] {signal.get('reason', '')}"
                     price = current_prices[symbol]["price"]
                     result = sim.apply_signal(symbol, signal, price, all_prices_usd)
                     bot_results.append(result)

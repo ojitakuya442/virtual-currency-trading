@@ -8,10 +8,11 @@ from datetime import datetime, timezone
 from src.config import (
     INITIAL_BALANCE, TOTAL_COST_RATE, USD_JPY_RATE,
     CIRCUIT_BREAKER_THRESHOLD, POSITION_CHANGE_THRESHOLD,
+    MIN_HOLD_MINUTES,
 )
 from src.database import (
     get_bot_state, update_bot_state, save_trade,
-    save_balance_snapshot, get_positions,
+    save_balance_snapshot, get_positions, get_last_trade_time,
 )
 
 logger = logging.getLogger(__name__)
@@ -102,6 +103,20 @@ class Simulator:
                 "current_pos": current_pos,
                 "target_pos": target_pos,
             }
+
+        # 最低保有期間 (2026-07-05 構成見直し①): 直近約定から一定時間はポジション変更しない。
+        # 5分足ノイズによる往復約定がコストの主因(累計-90,244円)だったための抑制策
+        if MIN_HOLD_MINUTES > 0:
+            last_ts = get_last_trade_time(self.bot_name, symbol)
+            if last_ts is not None:
+                elapsed_min = (datetime.now(timezone.utc) - last_ts).total_seconds() / 60
+                if elapsed_min < MIN_HOLD_MINUTES:
+                    return {
+                        "executed": False,
+                        "reason": f"最低保有期間内 ({elapsed_min:.0f}分 < {MIN_HOLD_MINUTES}分)",
+                        "current_pos": current_pos,
+                        "target_pos": target_pos,
+                    }
 
         now = datetime.now(timezone.utc).isoformat()
 
