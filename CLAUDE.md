@@ -54,7 +54,8 @@ pip install -r requirements.txt
 python scripts/run_bots.py            # bot一括実行（ローカル動作確認に使う）
 python scripts/send_daily_report.py   # 日次レポート送信（要 DISCORD_WEBHOOK_URL）
 python src/export_dashboard.py        # dashboard.json 再生成
-sqlite3 data/trading_bot.db           # DB直接分析
+sqlite3 data/trading_bot.db           # DB直接分析（CLIが無い環境では下のPython代替を使う）
+python3 -c "import sqlite3; conn=sqlite3.connect('data/trading_bot.db'); [print(r) for r in conn.execute('''SELECT ...''')]"
 ```
 
 ## 作業上の注意
