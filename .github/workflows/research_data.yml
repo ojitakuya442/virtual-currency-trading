@@ -1,7 +1,12 @@
 name: リサーチ用長期データ取得
 
 on:
-  workflow_dispatch:  # 手動実行のみ
+  workflow_dispatch:  # 手動実行
+  schedule:
+    # 自動実行(日次)。手動起動APIが権限不足のため cron で代替 (2026-07-06)。
+    # リサーチ完了後はこの schedule を削除してよい
+    - cron: "20 11 * * *"
+    - cron: "50 13 * * *"  # 同日バックアップ (GitHub cron のスキップ対策)
 
 permissions:
   contents: write

@@ -199,23 +199,39 @@ def fetch_funding_rate(exchange_futures=None, symbol="BTC/USD"):
         return None
 
 
+_BINANCE_UM = None
+
+
+def _binance_um_exchange():
+    """Binance USDM perp のCCXTインスタンス（OI取得用・使い回し）。"""
+    global _BINANCE_UM
+    if _BINANCE_UM is None:
+        _BINANCE_UM = ccxt.binanceusdm({"enableRateLimit": True})
+    return _BINANCE_UM
+
+
 def fetch_open_interest(exchange_futures=None, symbol="BTC/USD"):
     """
     Open Interest (未決済建玉) を取得する。
 
+    データソースは Binance USDM perp の公開API。
+    ccxt は krakenfutures の fetchOpenInterest に未対応（2026-07-06 の本番ログで
+    確認: "fetchOpenInterest() is not supported yet"）のため、Kraken からは
+    構造的に取得できない。OI は市場全体のセンチメント指標として使うので
+    取引所が異なっても目的上問題ない（系列内で一貫していればよい）。
+
     Args:
+        exchange_futures: 互換性のため残置（未使用）
         symbol: 現物形式 "BTC/USD" or perp形式 "BTC/USD:USD"
 
     Returns:
         dict: {"open_interest": float, "timestamp": str} or None
     """
-    if exchange_futures is None:
-        exchange_futures = create_futures_exchange()
-
-    perp_symbol = _to_perpetual_symbol(symbol)
+    base = symbol.split("/")[0].split(":")[0]
+    perp_symbol = f"{base}/USDT:USDT"
 
     try:
-        oi = exchange_futures.fetch_open_interest(perp_symbol)
+        oi = _binance_um_exchange().fetch_open_interest(perp_symbol)
         # CCXT openInterestAmount / openInterestValue / info.openInterest の順に探す
         raw = oi.get("openInterestAmount")
         if raw is None:
