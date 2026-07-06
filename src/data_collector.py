@@ -199,63 +199,48 @@ def fetch_funding_rate(exchange_futures=None, symbol="BTC/USD"):
         return None
 
 
-_BINANCE_UM = None
-
-
-def _binance_um_exchange():
-    """Binance USDM perp のCCXTインスタンス（OI取得用・使い回し）。"""
-    global _BINANCE_UM
-    if _BINANCE_UM is None:
-        _BINANCE_UM = ccxt.binanceusdm({"enableRateLimit": True})
-    return _BINANCE_UM
-
-
 def fetch_open_interest(exchange_futures=None, symbol="BTC/USD"):
     """
     Open Interest (未決済建玉) を取得する。
 
-    データソースは Binance USDM perp の公開API。
-    ccxt は krakenfutures の fetchOpenInterest に未対応（2026-07-06 の本番ログで
-    確認: "fetchOpenInterest() is not supported yet"）のため、Kraken からは
-    構造的に取得できない。OI は市場全体のセンチメント指標として使うので
-    取引所が異なっても目的上問題ない（系列内で一貫していればよい）。
+    データソースは Kraken Futures の native REST (/derivatives/api/v3/tickers)。
+    - ccxt は krakenfutures の fetchOpenInterest に未対応（2026-07-06 本番ログで確認）
+    - Binance は GitHub Actions ランナーを HTTP 451 でジオブロック（同日確認）
+    のため、Kraken の生APIを直接叩く。funding rate と同一取引所で系列の一貫性も良い。
 
     Args:
-        exchange_futures: 互換性のため残置（未使用）
+        exchange_futures: 互換性のため残置（未使用)
         symbol: 現物形式 "BTC/USD" or perp形式 "BTC/USD:USD"
 
     Returns:
         dict: {"open_interest": float, "timestamp": str} or None
     """
-    base = symbol.split("/")[0].split(":")[0]
-    perp_symbol = f"{base}/USDT:USDT"
+    import requests
+
+    base = symbol.split("/")[0].split(":")[0].upper()
+    base = {"BTC": "XBT"}.get(base, base)
+    instrument = f"PF_{base}USD"  # 例: PF_XBTUSD (linear multi-collateral perp)
 
     try:
-        oi = _binance_um_exchange().fetch_open_interest(perp_symbol)
-        # CCXT openInterestAmount / openInterestValue / info.openInterest の順に探す
-        raw = oi.get("openInterestAmount")
-        if raw is None:
-            raw = oi.get("openInterestValue")
-        if raw is None and isinstance(oi.get("info"), dict):
-            raw = oi["info"].get("openInterest")
-        try:
-            amount = float(raw) if raw is not None else 0.0
-        except (TypeError, ValueError):
-            amount = 0.0
-        if amount <= 0:
-            # 旧実装は `or 0` で欠損を黙って0として保存しており、OIが全期間0になる
-            # 原因だった。欠損は取得失敗として扱い、警告を残して None を返す
-            logger.warning(
-                f"[{symbol}→{perp_symbol}] Open Interest応答に有効な建玉数量なし "
-                f"(amount={oi.get('openInterestAmount')}, value={oi.get('openInterestValue')})"
-            )
-            return None
-        return {
-            "open_interest": amount,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-        }
+        resp = requests.get(
+            "https://futures.kraken.com/derivatives/api/v3/tickers", timeout=10)
+        resp.raise_for_status()
+        for t in resp.json().get("tickers", []):
+            if str(t.get("symbol", "")).upper() == instrument:
+                amount = float(t.get("openInterest") or 0)
+                if amount <= 0:
+                    # 欠損を0として保存しない（旧実装がOI全件0を生んだ教訓）
+                    logger.warning(
+                        f"[{symbol}→{instrument}] Open Interestが0/欠損: {t.get('openInterest')}")
+                    return None
+                return {
+                    "open_interest": amount,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }
+        logger.warning(f"[{symbol}→{instrument}] tickers応答に該当インストゥルメントなし")
+        return None
     except Exception as e:
-        logger.warning(f"[{symbol}→{perp_symbol}] Open Interest取得エラー: {e}")
+        logger.warning(f"[{symbol}→{instrument}] Open Interest取得エラー: {e}")
         return None
 
 

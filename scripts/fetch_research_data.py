@@ -99,18 +99,31 @@ def main():
     to_date = lambda ms: datetime.fromtimestamp(ms / 1000, tz=timezone.utc).strftime("%Y-%m-%d")
     to_iso = lambda ms: datetime.fromtimestamp(ms / 1000, tz=timezone.utc).isoformat()
 
-    # ── 1. Binance 日足 (2020〜) ──
-    try:
-        binance = ccxt.binance({"enableRateLimit": True})
-        for symbol in ("BTC/USDT", "ETH/USDT", "SOL/USDT"):
-            rows = fetch_daily_paginated(binance, symbol, DAILY_SINCE_MS)
+    # ── 1. Yahoo Finance 日足 (最長10年。Binance は Actions ランナーを
+    #      HTTP 451 でジオブロックするため代替。2026-07-06 変更) ──
+    import requests
+    for yf_ticker, symbol in (("BTC-USD", "BTC/USD"), ("ETH-USD", "ETH/USD"), ("SOL-USD", "SOL/USD")):
+        try:
+            r = requests.get(
+                f"https://query1.finance.yahoo.com/v8/finance/chart/{yf_ticker}",
+                params={"range": "10y", "interval": "1d"},
+                headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
+            r.raise_for_status()
+            res = r.json()["chart"]["result"][0]
+            ts = res["timestamp"]
+            q = res["indicators"]["quote"][0]
+            rows = [
+                (symbol, to_date(t * 1000), o, h, l, c, v)
+                for t, o, h, l, c, v in zip(ts, q["open"], q["high"], q["low"], q["close"], q["volume"])
+                if c is not None
+            ]
             conn.executemany(
-                "INSERT OR REPLACE INTO daily_prices VALUES ('binance', ?, ?, ?, ?, ?, ?, ?)",
-                [(symbol, to_date(r[0]), r[1], r[2], r[3], r[4], r[5]) for r in rows])
+                "INSERT OR REPLACE INTO daily_prices VALUES ('yahoo', ?, ?, ?, ?, ?, ?, ?)", rows)
             conn.commit()
-            log.info(f"binance {symbol}: {len(rows)}日分")
-    except Exception as e:
-        log.error(f"Binance日足の取得に失敗: {e}")
+            log.info(f"yahoo {symbol}: {len(rows)}日分 ({rows[0][1]}〜{rows[-1][1]})")
+            time.sleep(1)
+        except Exception as e:
+            log.error(f"Yahoo日足の取得に失敗 ({yf_ticker}): {e}")
 
     # ── 2. Kraken 日足 (約720日・クロスチェック用) ──
     try:
@@ -126,16 +139,18 @@ def main():
     except Exception as e:
         log.error(f"Kraken日足の取得に失敗: {e}")
 
-    # ── 3. Binance USDM funding rate 履歴 (キャリー検証用) ──
+    # ── 3. Kraken Futures funding rate 履歴 (キャリー検証用。
+    #      Binance はジオブロックのため Kraken に変更。2026-07-06) ──
     try:
-        um = ccxt.binanceusdm({"enableRateLimit": True})
-        for symbol in ("BTC/USDT:USDT", "ETH/USDT:USDT", "SOL/USDT:USDT"):
-            rows = fetch_funding_paginated(um, symbol, DAILY_SINCE_MS)
+        kf = ccxt.krakenfutures({"enableRateLimit": True})
+        for symbol in ("BTC/USD:USD", "ETH/USD:USD", "SOL/USD:USD"):
+            rows = fetch_funding_paginated(kf, symbol, DAILY_SINCE_MS)
             conn.executemany(
-                "INSERT OR REPLACE INTO funding_rates VALUES ('binanceusdm', ?, ?, ?)",
+                "INSERT OR REPLACE INTO funding_rates VALUES ('krakenfutures', ?, ?, ?)",
                 [(symbol, to_iso(r["timestamp"]), float(r["fundingRate"] or 0)) for r in rows])
             conn.commit()
             log.info(f"funding {symbol}: {len(rows)}件")
+            time.sleep(1)
     except Exception as e:
         log.error(f"Funding履歴の取得に失敗: {e}")
 

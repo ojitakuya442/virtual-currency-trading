@@ -23,15 +23,25 @@ import pandas as pd
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DB = ROOT / "data" / "research.db"
 COST = 0.0015
-OOS_START = "2025-01-01"
+# データがKraken 720日(2024-07〜)のみとなったため分割を調整 (2026-07-06、結果を見る前に確定):
+# IS = 2024-07〜2025-08 (後期強気+レンジ) / OOS = 2025-09〜 (2026暴落を含む)
+OOS_START = "2025-09-01"
 
 
 def load_daily(symbol_usdt: str) -> pd.Series:
+    """binance優先、無ければkraken(USD建てシンボルに変換)で読む。"""
     conn = sqlite3.connect(str(DB))
-    df = pd.read_sql_query(
-        "SELECT date, close FROM daily_prices WHERE source='binance' AND symbol=? ORDER BY date",
-        conn, params=(symbol_usdt,))
+    sym_usd = symbol_usdt.replace("/USDT", "/USD")
+    df = pd.DataFrame()
+    for source, s in (("yahoo", sym_usd), ("binance", symbol_usdt), ("kraken", sym_usd)):
+        df = pd.read_sql_query(
+            "SELECT date, close FROM daily_prices WHERE source=? AND symbol=? ORDER BY date",
+            conn, params=(source, s))
+        if not df.empty:
+            break
     conn.close()
+    if df.empty:
+        return pd.Series(dtype=float)
     s = df.set_index(pd.to_datetime(df["date"]))["close"].astype(float)
     return s[~s.index.duplicated()]
 
@@ -108,25 +118,29 @@ def rebalance_5050(close, band=0.10):
 def carry_report():
     conn = sqlite3.connect(str(DB))
     df = pd.read_sql_query(
-        "SELECT symbol, timestamp, rate FROM funding_rates WHERE source='binanceusdm' ORDER BY timestamp",
-        conn)
+        "SELECT source, symbol, timestamp, rate FROM funding_rates ORDER BY timestamp", conn)
     conn.close()
     if df.empty:
-        print("  funding データなし (取得失敗?)")
+        print("\n== H2: funding キャリー == データなし (取得失敗?)")
         return
     df["timestamp"] = pd.to_datetime(df["timestamp"], format="mixed", utc=True)
-    print(f"\n== H2: funding キャリー (Binance perp, 8時間毎×年1095回) ==")
-    for sym, g in df.groupby("symbol"):
-        g = g.set_index("timestamp")["rate"]
-        ann = g.groupby(g.index.year).mean() * 3 * 365 * 100  # 年率%
+    print(f"\n== H2: funding キャリー (現物ロング+perpショートで funding を受け取る) ==")
+    for (source, sym), g in df.groupby(["source", "symbol"]):
+        g = g.set_index("timestamp")["rate"].sort_index()
+        # 支払周期を実データから推定して年率化 (取引所により1h/8h等が異なる)
+        step = g.index.to_series().diff().median()
+        per_year = pd.Timedelta(days=365) / step if step and step.total_seconds() > 0 else 365 * 3
+        ann = g.groupby(g.index.year).mean() * per_year * 100
         pos_share = (g > 0).mean() * 100
-        print(f"  {sym}: 年率平均funding {dict(ann.round(1))} / 正の期間 {pos_share:.0f}%")
-        # 簡易キャリーシム: fundingの30期間MAが正の間だけ建玉。切替時に4レッグ×0.15%
+        print(f"  [{source}] {sym} ({g.index[0]:%Y-%m}〜{g.index[-1]:%Y-%m}, 周期≈{step}): "
+              f"年率平均funding {dict(ann.round(1))}% / 正の期間 {pos_share:.0f}%")
+        # 簡易キャリーシム: fundingの30期間MAが正の間だけ建玉。切替時に2レッグ×0.15%
         ma = g.rolling(30).mean()
         on = (ma > 0).astype(int)
-        pnl = (g * on.shift(1).fillna(0)).cumsum() - on.diff().abs().fillna(on).cumsum() * (4 * COST / 2)
+        pnl = (g * on.shift(1).fillna(0)).cumsum() - on.diff().abs().fillna(on).cumsum() * (2 * COST)
         yrs = (g.index[-1] - g.index[0]).days / 365.25
-        print(f"    キャリー戦略 累計 {pnl.iloc[-1]*100:+.1f}% ({yrs:.1f}年, 年率 {pnl.iloc[-1]/yrs*100:+.1f}%), 建玉率 {on.mean()*100:.0f}%")
+        if yrs > 0:
+            print(f"    キャリー戦略 累計 {pnl.iloc[-1]*100:+.1f}% ({yrs:.1f}年, 年率 {pnl.iloc[-1]/yrs*100:+.1f}%), 建玉率 {on.mean()*100:.0f}%")
 
 
 def fmt(m):
@@ -148,22 +162,27 @@ def main():
             print(f"{sym}: データなし")
             continue
         print(f"\n===== {sym} ({close_full.index[0]:%Y-%m-%d}〜{close_full.index[-1]:%Y-%m-%d}) =====")
-        for label, sl in (("IS(〜2024)", slice(None, OOS_START)),
-                          ("OOS(2025〜)", slice(OOS_START, None)),
+        # 指標・ポジションは全系列で一度だけ計算し(ウォームアップを共有)、期間はスライスで評価
+        pos_all = {
+            "SMA50/200": sma_cross(close_full, 50, 200),
+            "SMA20/100": sma_cross(close_full, 20, 100),
+            "Donchian55/20": donchian(close_full),
+            "TSMOM90d": tsmom(close_full),
+        }
+        for label, sl in (("IS(〜2025-08)", slice(None, OOS_START)),
+                          ("OOS(2025-09〜)", slice(OOS_START, None)),
                           ("全期間", slice(None, None))):
             close = close_full.loc[sl]
-            if len(close) < 250:
+            if len(close) < 150:
                 continue
             print(f"  -- {label} ({close.index[0]:%Y-%m}〜{close.index[-1]:%Y-%m}) --")
             bh = pd.Series(1.0, index=close.index)
             print(fmt(metrics(equity_from_position(close, bh), bh, "Buy&Hold")))
-            for name, pos in (("SMA50/200", sma_cross(close, 50, 200)),
-                              ("SMA20/100", sma_cross(close, 20, 100)),
-                              ("Donchian55/20", donchian(close)),
-                              ("TSMOM90d", tsmom(close))):
+            for name, pos_full in pos_all.items():
+                pos = pos_full.loc[sl]
                 print(fmt(metrics(equity_from_position(close, pos), pos, name)))
             eq, n = rebalance_5050(close)
-            m = metrics(eq, pd.Series(0.5, index=close.index), f"50/50リバランス")
+            m = metrics(eq, pd.Series(0.5, index=close.index), "50/50リバランス")
             m["trades"] = n
             print(fmt(m))
 
